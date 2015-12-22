@@ -1,6 +1,12 @@
 package com.amayadream.leave.pojo;
 
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.springframework.stereotype.Repository;
+
+import java.util.Map;
 
 /**
  * NAME   :  LeaveSystem/com.amayadream.leave.dao
@@ -20,6 +26,13 @@ public class Leave {
     private String applytime;           //申请时间
     private String realitystarttime;    //实际开始时间
     private String realityendtime;      //实际结束时间
+
+    // -- 临时属性 -- //
+    private Task task;       //流程任务
+    private Map<String, Object> variables;      //
+    private ProcessInstance processInstance;    //运行中的流程实例
+    private HistoricProcessInstance historicProcessInstance;    //历史的流程实例
+    private ProcessDefinition processDefinition;    //流程定义
 
     /**
      * getter&setter
@@ -103,5 +116,45 @@ public class Leave {
 
     public void setRealityendtime(String realityendtime) {
         this.realityendtime = realityendtime;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
+
+    public Map<String, Object> getVariables() {
+        return variables;
+    }
+
+    public void setVariables(Map<String, Object> variables) {
+        this.variables = variables;
+    }
+
+    public ProcessInstance getProcessInstance() {
+        return processInstance;
+    }
+
+    public void setProcessInstance(ProcessInstance processInstance) {
+        this.processInstance = processInstance;
+    }
+
+    public HistoricProcessInstance getHistoricProcessInstance() {
+        return historicProcessInstance;
+    }
+
+    public void setHistoricProcessInstance(HistoricProcessInstance historicProcessInstance) {
+        this.historicProcessInstance = historicProcessInstance;
+    }
+
+    public ProcessDefinition getProcessDefinition() {
+        return processDefinition;
+    }
+
+    public void setProcessDefinition(ProcessDefinition processDefinition) {
+        this.processDefinition = processDefinition;
     }
 }

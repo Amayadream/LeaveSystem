@@ -1,18 +1,16 @@
-package com.amayadream.leave.dao;
+package com.amayadream.leave.service;
 
 import com.amayadream.leave.pojo.User;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
- * NAME   :  LeaveSystem/com.amayadream.leave.dao
+ * NAME   :  LeaveSystem/com.amayadream.leave.service
  * Author :  Amayadream
- * Date   :  2015.12.21 22:35
+ * Date   :  2015.12.21 22:57
  * TODO   :
  */
-@Service("userDao")
-public interface IUserDao {
+public interface IUserService {
     List<User> selectAll();
     User selectUserByUserid(String userid);
     boolean insert(User user);
