@@ -1,9 +1,11 @@
 package com.amayadream.leave.serviceImpl;
 
+import com.amayadream.leave.dao.ILeaveDao;
 import com.amayadream.leave.pojo.Leave;
 import com.amayadream.leave.service.ILeaveService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -14,27 +16,30 @@ import java.util.List;
  */
 @Service("leaveService")
 public class LeaveServiceImpl implements ILeaveService {
+
+    @Resource private ILeaveDao leaveDao;
+
     public List<Leave> selectAll() {
-        return null;
+        return leaveDao.selectAll();
     }
 
     public Leave selectLeaveById(String id) {
-        return null;
+        return leaveDao.selectLeaveById(id);
     }
 
     public List<Leave> selectLeaveByUserid(String userid) {
-        return null;
+        return leaveDao.selectLeaveByUserid(userid);
     }
 
     public boolean insert(Leave leave) {
-        return false;
+        return leaveDao.insert(leave);
     }
 
     public boolean update(Leave leave) {
-        return false;
+        return leaveDao.update(leave);
     }
 
     public boolean delete(String id) {
-        return false;
+        return leaveDao.delete(id);
     }
 }

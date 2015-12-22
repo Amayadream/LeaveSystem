@@ -10,7 +10,7 @@
                         http://www.springframework.org/schema/mvc
                         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
     <!-- 自动扫描 -->
-    <context:component-scan base-package="com.amayadream,org.activiti.conf,org.activiti.rest.editor,org.activiti.rest.service" />
+    <context:component-scan base-package="com.amayadream,org.activiti.rest.editor" />
 
     <!-- 引入jdbc配置文件 -->
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -80,20 +80,20 @@
                 <!--<value>classpath*:/deployments/*</value>-->
             <!--</list>-->
         <!--</property>-->
-        <!--<property name="customSessionFactories">-->
-            <!--<list>-->
-                <!--<bean class="com.amayadream.demo.extend.CustomGroupManagerFactory" >-->
-                    <!--<property name="groupEntityManager">-->
-                        <!--<bean class="com.amayadream.demo.extend.CustomGroupManager"></bean>-->
-                    <!--</property>-->
-                <!--</bean>-->
-                <!--<bean class="com.amayadream.demo.extend.CustomUserManagerFactory" >-->
-                    <!--<property  name="userEntityManager">-->
-                        <!--<bean id="userEntityManager" class="com.amayadream.demo.extend.CustomUserManager"></bean>-->
-                    <!--</property>-->
-                <!--</bean>-->
-            <!--</list>-->
-        <!--</property>-->
+        <property name="customSessionFactories">
+            <list>
+                <bean class="com.amayadream.leave.activiti.extend.CustomGroupManagerFactory" >
+                    <property name="groupEntityManager">
+                        <bean class="com.amayadream.leave.activiti.extend.CustomGroupManager"></bean>
+                    </property>
+                </bean>
+                <bean class="com.amayadream.leave.activiti.extend.CustomUserManagerFactory" >
+                    <property  name="userEntityManager">
+                        <bean id="userEntityManager" class="com.amayadream.leave.activiti.extend.CustomUserManager"></bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
     </bean>
 
     <!-- activiti的各种服务接口 -->

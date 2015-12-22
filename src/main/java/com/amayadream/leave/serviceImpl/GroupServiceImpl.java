@@ -1,9 +1,11 @@
 package com.amayadream.leave.serviceImpl;
 
+import com.amayadream.leave.dao.IGroupDao;
 import com.amayadream.leave.pojo.Group;
 import com.amayadream.leave.service.IGroupService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -14,23 +16,26 @@ import java.util.List;
  */
 @Service("groupService")
 public class GroupServiceImpl implements IGroupService {
+
+    @Resource private IGroupDao groupDao;
+
     public List<Group> selectAll() {
-        return null;
+        return groupDao.selectAll();
     }
 
     public List<Group> selectGroupByUserid(String userid) {
-        return null;
+        return groupDao.selectGroupByUserid(userid);
     }
 
     public boolean insert(Group group) {
-        return false;
+        return groupDao.insert(group);
     }
 
     public boolean update(Group group) {
-        return false;
+        return groupDao.update(group);
     }
 
     public boolean delete(String groupid) {
-        return false;
+        return groupDao.delete(groupid);
     }
 }

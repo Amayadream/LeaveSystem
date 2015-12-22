@@ -1,9 +1,11 @@
 package com.amayadream.leave.serviceImpl;
 
+import com.amayadream.leave.dao.IUserDao;
 import com.amayadream.leave.pojo.User;
 import com.amayadream.leave.service.IUserService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -14,23 +16,26 @@ import java.util.List;
  */
 @Service("userService")
 public class UserServiceImpl implements IUserService {
+
+    @Resource private IUserDao userDao;
+
     public List<User> selectAll() {
-        return null;
+        return userDao.selectAll();
     }
 
     public User selectUserByUserid(String userid) {
-        return null;
+        return userDao.selectUserByUserid(userid);
     }
 
     public boolean insert(User user) {
-        return false;
+        return userDao.insert(user);
     }
 
     public boolean update(User user) {
-        return false;
+        return userDao.update(user);
     }
 
     public boolean delete(String userid) {
-        return false;
+        return userDao.delete(userid);
     }
 }
