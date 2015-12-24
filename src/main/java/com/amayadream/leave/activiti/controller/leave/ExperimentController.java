@@ -1,20 +1,19 @@
 package com.amayadream.leave.activiti.controller.leave;
 
-import com.amayadream.demo.activiti.service.experiment.ExperimentWorkflowService;
-import com.amayadream.demo.pojo.Experiment;
-import com.amayadream.demo.service.IExperimentService;
-import com.amayadream.demo.util.*;
-import org.activiti.engine.ActivitiException;
+import com.amayadream.leave.activiti.service.leave.LeaveWorkflowService;
+import com.amayadream.leave.pojo.Leave;
+import com.amayadream.leave.service.ILeaveService;
+import com.amayadream.leave.util.Page;
+import com.amayadream.leave.util.PageUtil;
+import com.amayadream.leave.util.UserUtil;
+import com.amayadream.leave.util.Variable;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.identity.User;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,62 +34,17 @@ import java.util.Map;
  * @author HenryYan
  */
 @Controller
-@RequestMapping(value = "/experiment")
+@RequestMapping(value = "/leave")
 public class ExperimentController {
 
   private Logger logger = LoggerFactory.getLogger(getClass());
-  @Autowired protected ExperimentWorkflowService workflowService;
+  @Autowired protected LeaveWorkflowService workflowService;
   @Autowired protected RuntimeService runtimeService;
   @Autowired protected TaskService taskService;
   @Autowired protected RepositoryService repositoryService;
 
-  @Resource private IExperimentService experimentService;
-  @Resource private Experiment experiment;
-
-  @RequestMapping(value = { "apply", "" })
-  public String createForm(Model model) {
-    model.addAttribute("experiment", new Experiment());
-    return "/oa/leave/leaveApply";
-  }
-
-  @RequestMapping(value = "deploy")
-  public String deploy(RedirectAttributes redirectAttributes){
-    repositoryService.createDeployment().name("experiment")
-                                        .addClasspathResource("diagrams/experiment/experiment.bpmn")
-//                                        .addClasspathResource("diagrams/experiment/experiment.png")
-                                        .deploy();
-    redirectAttributes.addFlashAttribute("message","部署成功");
-    return "redirect:/experiment/list/task";
-  }
-
-  /**
-   * 启动实验流程
-   * 
-   * @param experiment
-   */
-  @RequestMapping(value = "start")
-  @Transactional(readOnly = true)
-  public String startWorkflow(Experiment experiment, RedirectAttributes redirectAttributes, HttpSession session) {
-    try {
-      User user = UserUtil.getUserFromSession(session);
-      experiment.setUserid(user.getId());
-      Map<String, Object> variables = new HashMap<String, Object>();
-      ProcessInstance processInstance = workflowService.startWorkflow(experiment, variables);
-      redirectAttributes.addFlashAttribute("message", "流程已启动，流程ID：" + processInstance.getId());
-    } catch (ActivitiException e) {
-      if (e.getMessage().indexOf("no processes deployed with key") != -1) {
-        logger.warn("没有部署流程!", e);
-        redirectAttributes.addFlashAttribute("error", "没有部署流程，请在[工作流]->[流程管理]页面点击<重新部署流程>");
-      } else {
-        logger.error("启动实验流程失败：", e);
-        redirectAttributes.addFlashAttribute("error", "系统内部错误！");
-      }
-    } catch (Exception e) {
-      logger.error("启动实验流程失败：", e);
-      redirectAttributes.addFlashAttribute("error", "系统内部错误！");
-    }
-    return "redirect:/experiment/list/task";
-  }
+  @Resource private ILeaveService leaveService;
+  @Resource private Leave leave;
 
   /**
    * 任务列表
@@ -98,7 +52,7 @@ public class ExperimentController {
   @RequestMapping(value = "/list/task")
   public ModelAndView taskList(HttpSession session, HttpServletRequest request) {
     ModelAndView mav = new ModelAndView("/show");
-    Page<Experiment> page = new Page<Experiment>(PageUtil.PAGE_SIZE);
+    Page<Leave> page = new Page<Leave>(PageUtil.PAGE_SIZE);
     int[] pageParams = PageUtil.init(page, request);
     String userId = UserUtil.getUserFromSession(session).getId();
     workflowService.findTodoTasks(userId, page, pageParams);
@@ -114,7 +68,7 @@ public class ExperimentController {
   @RequestMapping(value = "list/running")
   public ModelAndView runningList(HttpServletRequest request) {
     ModelAndView mav = new ModelAndView("/running");
-    Page<Experiment> page = new Page<Experiment>(PageUtil.PAGE_SIZE);
+    Page<Leave> page = new Page<Leave>(PageUtil.PAGE_SIZE);
     int[] pageParams = PageUtil.init(page, request);
     workflowService.findRunningProcessInstaces(page, pageParams);
     mav.addObject("page", page);
@@ -129,7 +83,7 @@ public class ExperimentController {
   @RequestMapping(value = "list/finished")
   public ModelAndView finishedList(HttpServletRequest request) {
     ModelAndView mav = new ModelAndView("/finished");
-    Page<Experiment> page = new Page<Experiment>(PageUtil.PAGE_SIZE);
+    Page<Leave> page = new Page<Leave>(PageUtil.PAGE_SIZE);
     int[] pageParams = PageUtil.init(page, request);
     workflowService.findFinishedProcessInstaces(page, pageParams);
     mav.addObject("page", page);
@@ -144,7 +98,7 @@ public class ExperimentController {
     String userId = UserUtil.getUserFromSession(session).getId();
     taskService.claim(taskId, userId);
     redirectAttributes.addFlashAttribute("message", "任务已签收");
-    return "redirect:/experiment/list/task";
+    return "redirect:/leave/list/task";
   }
 
   /**
@@ -155,9 +109,9 @@ public class ExperimentController {
    */
   @RequestMapping(value = "detail/{id}")
   @ResponseBody
-  public Experiment getExperiment(@PathVariable("id") String id) {
-    Experiment experiment = experimentService.selectExperimentById(id);
-    return experiment;
+  public Leave getExperiment(@PathVariable("id") String id) {
+    Leave leave = leaveService.selectLeaveById(id);
+    return leave;
   }
 
   /**
@@ -167,11 +121,11 @@ public class ExperimentController {
    */
   @RequestMapping(value = "detail-with-vars/{id}/{taskId}")
   @ResponseBody
-  public Experiment getExperimentWithVars(@PathVariable("id") String id, @PathVariable("taskId") String taskId) {
-    Experiment experiment = experimentService.selectExperimentById(taskId);
+  public Leave getExperimentWithVars(@PathVariable("id") String id, @PathVariable("taskId") String taskId) {
+    Leave leave = leaveService.selectLeaveById(taskId);
     Map<String, Object> variables = taskService.getVariables(taskId);
-    experiment.setVariables(variables);
-    return experiment;
+    leave.setVariables(variables);
+    return leave;
   }
 
   /**
@@ -205,10 +159,10 @@ public class ExperimentController {
       map.put("pass",var);
       taskService.complete(taskId, map);
       redirectAttributes.addFlashAttribute("message","完成步骤");
-      return "redirect:/experiment/list/task";
+      return "redirect:/leave/list/task";
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute("error","操作失败");
-      return "redirect:/experiment/list/task";
+      return "redirect:/leave/list/task";
     }
   }
 

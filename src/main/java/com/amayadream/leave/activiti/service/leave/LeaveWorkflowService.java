@@ -1,9 +1,9 @@
 package com.amayadream.leave.activiti.service.leave;
 
-import com.amayadream.demo.pojo.Experiment;
-import com.amayadream.demo.service.IExperimentService;
-import com.amayadream.demo.util.DateUtil;
-import com.amayadream.demo.util.Page;
+import com.amayadream.leave.pojo.Leave;
+import com.amayadream.leave.service.ILeaveService;
+import com.amayadream.leave.util.DateUtil;
+import com.amayadream.leave.util.Page;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
@@ -30,56 +30,34 @@ import java.util.Map;
  */
 @Component
 @Transactional
-public class ExperimentWorkflowService {
-  private static Logger logger = LoggerFactory.getLogger(ExperimentWorkflowService.class);
+public class LeaveWorkflowService {
+  private static Logger logger = LoggerFactory.getLogger(LeaveWorkflowService.class);
   @Autowired private RuntimeService runtimeService;
   @Autowired protected TaskService taskService;
   @Autowired protected HistoryService historyService;
   @Autowired protected RepositoryService repositoryService;
   @Autowired private IdentityService identityService;
-  @Resource private IExperimentService experimentService;
-  @Resource private Experiment experiment;
-
-  /**
-   * 启动流程
-   * @param experiment  实验实体
-   * @param variables   各种参数
-   * @return
-     */
-  public ProcessInstance startWorkflow(Experiment experiment, Map<String, Object> variables) {
-    DateUtil dateUtil = new DateUtil();
-    experiment.setStarttime(dateUtil.getDateTime24());
-    experimentService.insert(experiment);
-    String businessKey = experiment.getId();
-    // 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
-    identityService.setAuthenticatedUserId(experiment.getUserid());
-//    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("experiment", businessKey, variables);
-    ProcessInstance processInstance = runtimeService.startProcessInstanceById("experiment:3:5026", businessKey, variables);
-    String processInstanceId = processInstance.getId();
-    experiment.setProcessinstanceid(processInstanceId);
-    experimentService.update(experiment);
-    logger.debug("start process of {key={}, bkey={}, pid={}, variables={}}", new Object[] { "experiment", businessKey, processInstanceId, variables });
-    return processInstance;
-  }
+  @Resource private ILeaveService leaveService;
+  @Resource private Leave leave;
 
   /**
    * 根据key启动流程
-   * @param key
-   * @param experiment
+   * @param id
+   * @param leave
    * @param variables
      * @return
      */
-  public ProcessInstance start(String id, Experiment experiment, Map<String, Object> variables){
+  public ProcessInstance start(String id, Leave leave, Map<String, Object> variables){
     DateUtil dateUtil = new DateUtil();
-    experiment.setStarttime(dateUtil.getDateTime24());
-    experimentService.insert(experiment);
-    String businessKey = experiment.getId();
+    leave.setStarttime(dateUtil.getDateTime24());
+    leaveService.insert(leave);
+    String businessKey = leave.getId();
     // 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
-    identityService.setAuthenticatedUserId(experiment.getUserid());
+    identityService.setAuthenticatedUserId(leave.getUserid());
     ProcessInstance processInstance = runtimeService.startProcessInstanceById(id, businessKey, variables);
     String processInstanceId = processInstance.getId();
-    experiment.setProcessinstanceid(processInstanceId);
-    experimentService.update(experiment);
+    leave.setProcessinstanceid(processInstanceId);
+    leaveService.update(leave);
     return processInstance;
   }
 
@@ -91,18 +69,18 @@ public class ExperimentWorkflowService {
    * @return
    */
   @Transactional(readOnly = true)
-  public List<Experiment> findTodoTasks(String userid, Page<Experiment> page, int[] pageParams) {
-    List<Experiment> results = new ArrayList<Experiment>();
+  public List<Leave> findTodoTasks(String userid, Page<Leave> page, int[] pageParams) {
+    List<Leave> results = new ArrayList<Leave>();
     List<Task> tasks = new ArrayList<Task>();
 
     // 根据当前人的ID查询
-    TaskQuery todoQuery = taskService.createTaskQuery().processDefinitionKey("experiment").taskAssignee(userid).active().orderByTaskId().desc()
+    TaskQuery todoQuery = taskService.createTaskQuery().processDefinitionKey("leave").taskAssignee(userid).active().orderByTaskId().desc()
             .orderByTaskCreateTime().desc();
 
     List<Task> todoList = todoQuery.listPage(pageParams[0], pageParams[1]);
 
     // 根据当前人未签收的任务
-    TaskQuery claimQuery = taskService.createTaskQuery().processDefinitionKey("experiment").taskCandidateUser(userid).active().orderByTaskId().desc()
+    TaskQuery claimQuery = taskService.createTaskQuery().processDefinitionKey("leave").taskCandidateUser(userid).active().orderByTaskId().desc()
             .orderByTaskCreateTime().desc();
     List<Task> unsignedTasks = claimQuery.listPage(pageParams[0], pageParams[1]);
 
@@ -115,11 +93,11 @@ public class ExperimentWorkflowService {
       String processInstanceId = task.getProcessInstanceId();
       ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).active().singleResult();
       String businessKey = processInstance.getBusinessKey();
-      Experiment experiment = experimentService.selectExperimentById(businessKey);
-      experiment.setTask(task);
-      experiment.setProcessInstance(processInstance);
-      experiment.setProcessDefinition(getProcessDefinition(processInstance.getProcessDefinitionId()));
-      results.add(experiment);
+      Leave leave = leaveService.selectLeaveById(businessKey);
+      leave.setTask(task);
+      leave.setProcessInstance(processInstance);
+      leave.setProcessDefinition(getProcessDefinition(processInstance.getProcessDefinitionId()));
+      results.add(leave);
     }
     
     page.setTotalCount(todoQuery.count() + claimQuery.count());
@@ -133,22 +111,22 @@ public class ExperimentWorkflowService {
    * @return
    */
   @Transactional(readOnly = true)
-  public List<Experiment> findRunningProcessInstaces(Page<Experiment> page, int[] pageParams) {
-    List<Experiment> results = new ArrayList<Experiment>();
-    ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery().processDefinitionKey("experiment").active().orderByProcessInstanceId().desc();
+  public List<Leave> findRunningProcessInstaces(Page<Leave> page, int[] pageParams) {
+    List<Leave> results = new ArrayList<Leave>();
+    ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery().processDefinitionKey("leave").active().orderByProcessInstanceId().desc();
     List<ProcessInstance> list = query.listPage(pageParams[0], pageParams[1]);
 
     // 关联业务实体
     for (ProcessInstance processInstance : list) {
       String businessKey = processInstance.getBusinessKey();
-      Experiment experiment = experimentService.selectExperimentById(businessKey);
-      experiment.setProcessInstance(processInstance);
-      experiment.setProcessDefinition(getProcessDefinition(processInstance.getProcessDefinitionId()));
-      results.add(experiment);
+      Leave leave = leaveService.selectLeaveById(businessKey);
+      leave.setProcessInstance(processInstance);
+      leave.setProcessDefinition(getProcessDefinition(processInstance.getProcessDefinitionId()));
+      results.add(leave);
 
       // 设置当前任务信息
       List<Task> tasks = taskService.createTaskQuery().processInstanceId(processInstance.getId()).active().orderByTaskCreateTime().desc().listPage(0, 1);
-      experiment.setTask(tasks.get(0));
+      leave.setTask(tasks.get(0));
     }
     page.setTotalCount(query.count());
     page.setResult(results);
@@ -161,18 +139,18 @@ public class ExperimentWorkflowService {
    * @return
    */
   @Transactional(readOnly = true)
-  public List<Experiment> findFinishedProcessInstaces(Page<Experiment> page, int[] pageParams) {
-    List<Experiment> results = new ArrayList<Experiment>();
-    HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery().processDefinitionKey("experiment").finished().orderByProcessInstanceEndTime().desc();
+  public List<Leave> findFinishedProcessInstaces(Page<Leave> page, int[] pageParams) {
+    List<Leave> results = new ArrayList<Leave>();
+    HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery().processDefinitionKey("leave").finished().orderByProcessInstanceEndTime().desc();
     List<HistoricProcessInstance> list = query.listPage(pageParams[0], pageParams[1]);
 
     // 关联业务实体
     for (HistoricProcessInstance historicProcessInstance : list) {
       String businessKey = historicProcessInstance.getBusinessKey();
-      Experiment experiment = experimentService.selectExperimentById(businessKey);
-      experiment.setProcessDefinition(getProcessDefinition(historicProcessInstance.getProcessDefinitionId()));
-      experiment.setHistoricProcessInstance(historicProcessInstance);
-      results.add(experiment);
+      Leave leave = leaveService.selectLeaveById(businessKey);
+      leave.setProcessDefinition(getProcessDefinition(historicProcessInstance.getProcessDefinitionId()));
+      leave.setHistoricProcessInstance(historicProcessInstance);
+      results.add(leave);
     }
     page.setTotalCount(query.count());
     page.setResult(results);

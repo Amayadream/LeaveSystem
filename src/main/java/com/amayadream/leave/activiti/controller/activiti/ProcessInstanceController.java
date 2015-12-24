@@ -1,10 +1,10 @@
 package com.amayadream.leave.activiti.controller.activiti;
 
-import com.amayadream.demo.activiti.service.experiment.ExperimentWorkflowService;
-import com.amayadream.demo.pojo.Experiment;
-import com.amayadream.demo.util.Page;
-import com.amayadream.demo.util.PageUtil;
-import com.amayadream.demo.util.UserUtil;
+import com.amayadream.leave.activiti.service.leave.LeaveWorkflowService;
+import com.amayadream.leave.pojo.Leave;
+import com.amayadream.leave.util.Page;
+import com.amayadream.leave.util.PageUtil;
+import com.amayadream.leave.util.UserUtil;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -35,7 +35,7 @@ public class ProcessInstanceController {
     @Autowired
     private RepositoryService repositoryService;
     @Autowired
-    protected ExperimentWorkflowService workflowService;
+    protected LeaveWorkflowService workflowService;
 
     /**
      * 查询所有流程
@@ -57,12 +57,12 @@ public class ProcessInstanceController {
     }
 
     @RequestMapping(value = "start/{id}")
-    public String start(@PathVariable("id") String id, Experiment experiment, RedirectAttributes redirectAttributes, HttpSession session) {
+    public String start(@PathVariable("id") String id, Leave leave, RedirectAttributes redirectAttributes, HttpSession session) {
         try {
             org.activiti.engine.identity.User user = UserUtil.getUserFromSession(session);
-            experiment.setUserid(user.getId());
+            leave.setUserid(user.getId());
             Map<String, Object> variables = new HashMap<String, Object>();
-            ProcessInstance processInstance = workflowService.start(id, experiment, variables);
+            ProcessInstance processInstance = workflowService.start(id, leave, variables);
             redirectAttributes.addFlashAttribute("message", "流程已启动，流程ID：" + processInstance.getId());
         }
         catch (ActivitiException e) {
