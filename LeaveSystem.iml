@@ -13,12 +13,19 @@
     </facet>
     <facet type="Spring" name="Spring">
       <configuration>
+        <fileset id="web application context" name="MVC application context" removed="true">
+          <file>file://$MODULE_DIR$/src/main/resources/spring-mybatis.xml</file>
+        </fileset>
+        <fileset id="web SpringMVC servlet context" name="MVC SpringMVC servlet context" removed="true">
+          <file>file://$MODULE_DIR$/src/main/resources/spring-mvc.xml</file>
+        </fileset>
+        <fileset id="web ModelRestServlet servlet context" name="MVC ModelRestServlet servlet context" removed="true">
+          <file>file://$MODULE_DIR$/src/main/resources/spring-mvc-modeler.xml</file>
+        </fileset>
         <fileset id="fileset" name="Spring Application Context" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/spring-mvc-modeler.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/spring-mvc.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/spring-mybatis.xml</file>
-          <file>file://$MODULE_DIR$/src/main/java/org/activiti/explorer/DispatcherServletConfiguration.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/org/activiti/conf/RestConfiguration.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/org/activiti/conf/SecurityConfiguration.java</file>
         </fileset>
       </configuration>
     </facet>
