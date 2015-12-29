@@ -16,26 +16,26 @@
   <!-- 查询所有用户 -->
   <select id="selectAll" resultMap="BaseResultMap" >
     SELECT <include refid="Base_Column_List" />
-    FROM TEST_USER
+    FROM USERS
   </select>
 
   <!-- 根据用户id查询用户 -->
   <select id="selectUserByUserid" resultMap="BaseResultMap" parameterType="string" >
     SELECT
     <include refid="Base_Column_List" />
-    FROM TEST_USER
+    FROM USERS
     WHERE USERID = #{userid, jdbcType=VARCHAR}
   </select>
 
   <!-- 插入用户 -->
   <insert id="insert" parameterType="com.amayadream.leave.pojo.User" >
-    INSERT INTO TEST_USER (USERID, PASSWORD, REALNAME, EMAIL)
+    INSERT INTO USERS (USERID, PASSWORD, REALNAME, EMAIL)
     VALUES (#{userid, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR}, #{realname, jdbcType=VARCHAR}, #{email, jdbcType=VARCHAR})
   </insert>
 
   <!-- 更新用户 -->
   <update id="update" parameterType="com.amayadream.leave.pojo.User">
-    UPDATE TEST_USER
+    UPDATE USERS
     <set>
       <if test="password != null and password != ''">
         PASSWORD = #{password, jdbcType=VARCHAR},
@@ -52,7 +52,7 @@
 
   <!-- 删除用户 -->
   <delete id="delete" parameterType="string" >
-    DELETE FROM TEST_USER
+    DELETE FROM USERS
     WHERE USERID = #{userid, jdbcType=VARCHAR}
   </delete>
 
