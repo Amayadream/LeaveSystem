@@ -42,10 +42,15 @@ public class LogController {
      * @param userid
      * @return
      */
-    @RequestMapping(value = "id")
-    public ModelAndView id(@ModelAttribute("userid") String userid){
+    @RequestMapping(value = "{userid}")
+    public ModelAndView id(@ModelAttribute("userid") String id, @PathVariable("userid") String userid){
         ModelAndView view = new ModelAndView("/apps/leave/log");
-        List<Log> list = logService.selectLogByUserid(userid);
+        List<Log> list;
+        if(id.equals(userid)){
+            list = logService.selectLogByUserid(userid);
+        }else{
+            list = logService.selectLogByUserid(id);
+        }
         view.addObject("result",list);
         return view;
     }

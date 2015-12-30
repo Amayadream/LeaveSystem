@@ -3,7 +3,7 @@
 <%String path = request.getContextPath();%>
 <html>
 <head>
-    <title>请假系统|实验进程显示</title>
+    <title>请假系统|待处理任务</title>
     <link href="<%=path%>/plugins/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="<%=path%>/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" >
     <link href="<%=path%>/plugins/scojs/css/scojs.css" type="text/css" rel="stylesheet">
@@ -29,15 +29,15 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="<%=path%>/experiment/list/task">实验管理</a>
+            <a class="navbar-brand" href="<%=path%>/experiment/list/task">请假系统</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li class="dropdown active">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">实验管理 <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">请假管理 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li class="active"><a href="<%=path%>/experiment/list/task">实验进程显示 </a></li>
+                        <li class="active"><a href="<%=path%>/experiment/list/task">当前流程</a></li>
                         <li><a href="<%=path%>/experiment/list/running">在运行流程</a></li>
                         <li><a href="<%=path%>/experiment/list/finished">已结束流程</a></li>
                     </ul>
@@ -68,7 +68,7 @@
 
 <div class="container-fluid">
     <div style="float: right;margin-bottom: 20px">
-        <button class="btn btn-primary" onclick="javascript:startLeave();">我要请假</button>
+        <button class="btn btn-primary" onclick="javascript:startLeave();">请假</button>
     </div>
 
     <div>
@@ -77,7 +77,7 @@
             <tr>
                 <th>#</th>
                 <th>执行者</th>
-                <th>执行时间</th>
+                <th>申请时间</th>
                 <th>结束时间</th>
                 <th>当前节点</th>
                 <th>任务创建时间</th>

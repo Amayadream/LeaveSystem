@@ -1,5 +1,6 @@
 package com.amayadream.leave.activiti.controller.activiti;
 
+import com.alibaba.fastjson.JSON;
 import com.amayadream.leave.util.LogUtil;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -17,8 +18,26 @@ public class test {
 
     private String DRIVER = "oracle.jdbc.driver.OracleDriver";
     private String URL = "jdbc:oracle:thin:@localhost:1521:XE";
-    private String USERNAME = "activitidemo";
-    private String PASSSWORD = "activitidemo";
+    private String USERNAME = "leavesystem";
+    private String PASSSWORD = "leavesystem";
+
+    @Test
+    public void getTable(){
+        try {
+            Class.forName(DRIVER).newInstance();
+            Connection conn = DriverManager.getConnection(URL, USERNAME, PASSSWORD);
+            DatabaseMetaData metadata = conn.getMetaData();
+            ResultSet rs1 = metadata.getTables(null, null, null, new String[] { "TABLE" });
+            while (rs1.next()) {
+                System.out.println("表名：" + rs1.getString(3));
+                System.out.println("表所属用户名：" + rs1.getString(2));
+                System.out.println("------------------------------");
+            }
+            rs1.close();
+        }catch (Exception e){
+
+        }
+    }
 
     @Test
     public void getTableInfo(){
@@ -97,7 +116,7 @@ public class test {
 
 
     @Test
-    public void asd(HttpServletRequest request){
+    public void asd(){
         LogUtil logUtil = new LogUtil();
         try {
             Class.forName(DRIVER).newInstance();

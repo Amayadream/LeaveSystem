@@ -19,6 +19,7 @@
   <select id="selectAll" resultMap="BaseResultMap" >
     SELECT <include refid="Base_Column_List" />
     FROM LOG
+    ORDER BY TIME DESC
   </select>
 
   <!-- 根据用户id查询用户 -->
@@ -27,6 +28,7 @@
     <include refid="Base_Column_List" />
     FROM LOG
     WHERE USERID = #{userid, jdbcType=VARCHAR}
+    ORDER BY TIME DESC
   </select>
 
   <!-- 插入用户 -->

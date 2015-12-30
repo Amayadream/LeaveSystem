@@ -46,6 +46,7 @@ public class LoginController {
                 logService.insert(log);
                 System.out.println(JSON.toJSONString(log));
                 session.setAttribute("user",user);
+                session.setAttribute("userid",user.getUserid());
                 return "redirect:/index";
             }else{
                 redirectAttributes.addFlashAttribute("error","用户名或密码错误!请重新登陆!");
