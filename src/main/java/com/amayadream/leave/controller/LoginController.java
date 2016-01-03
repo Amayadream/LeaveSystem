@@ -1,6 +1,5 @@
 package com.amayadream.leave.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.amayadream.leave.pojo.Log;
 import com.amayadream.leave.pojo.User;
 import com.amayadream.leave.service.ILogService;
@@ -11,7 +10,6 @@ import com.amayadream.leave.util.NetUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
@@ -44,7 +42,6 @@ public class LoginController {
                 log.setDetail(logUtil.LOG_DETAIL_USER_LOGIN);
                 log.setIp(netUtil.getIpAddress(request));
                 logService.insert(log);
-                System.out.println(JSON.toJSONString(log));
                 session.setAttribute("user",user);
                 session.setAttribute("userid",user.getUserid());
                 return "redirect:/index";

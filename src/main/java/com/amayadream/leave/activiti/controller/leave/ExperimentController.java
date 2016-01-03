@@ -14,10 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,7 +30,8 @@ import java.util.Map;
  * @author HenryYan
  */
 @Controller
-@RequestMapping(value = "/leave")
+@RequestMapping(value = "leave")
+@SessionAttributes("userid")
 public class ExperimentController {
 
   private Logger logger = LoggerFactory.getLogger(getClass());
@@ -45,16 +43,24 @@ public class ExperimentController {
   @Resource private ILeaveService leaveService;
   @Resource private Leave leave;
 
+    @RequestMapping(value = "deploy")
+    public String deploy(RedirectAttributes redirectAttributes){
+        repositoryService.createDeployment().name("leave")
+                .addClasspathResource("diagrams/leave/leave.bpmn")
+                .deploy();
+        redirectAttributes.addFlashAttribute("message","部署成功");
+        return "redirect:/apps/leave/leave";
+    }
+
   /**
    * 任务列表
    */
-  @RequestMapping(value = "/list/task")
-  public ModelAndView taskList(HttpSession session, HttpServletRequest request) {
-    ModelAndView mav = new ModelAndView("/show");
+  @RequestMapping(value = "list/task")
+  public ModelAndView taskList(@ModelAttribute("userid") String userid, HttpServletRequest request) {
+    ModelAndView mav = new ModelAndView("/apps/leave/leave");
     Page<Leave> page = new Page<Leave>(PageUtil.PAGE_SIZE);
     int[] pageParams = PageUtil.init(page, request);
-    String userId = UserUtil.getUserFromSession(session).getId();
-    workflowService.findTodoTasks(userId, page, pageParams);
+    workflowService.findTodoTasks(userid, page, pageParams);
     mav.addObject("page", page);
     return mav;
   }

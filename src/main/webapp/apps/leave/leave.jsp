@@ -13,11 +13,6 @@
     <script src="<%=path%>/plugins/scojs/js/sco.message.js"></script>
     <script src="<%=path%>/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
     <script src="<%=path%>/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
-    <script type="text/javascript">
-    </script>
-    <script type="text/javascript">
-        var ctx = '<%=request.getContextPath() %>';
-    </script>
 </head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -29,7 +24,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="<%=path%>/experiment/list/task">请假系统</a>
+            <a class="navbar-brand" href="<%=path%>/leave/list/task">请假系统</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -37,9 +32,9 @@
                 <li class="dropdown active">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">请假管理 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li class="active"><a href="<%=path%>/experiment/list/task">当前流程</a></li>
-                        <li><a href="<%=path%>/experiment/list/running">在运行流程</a></li>
-                        <li><a href="<%=path%>/experiment/list/finished">已结束流程</a></li>
+                        <li class="active"><a href="<%=path%>/leave/list/task">当前流程</a></li>
+                        <li><a href="<%=path%>/leave/list/running">在运行流程</a></li>
+                        <li><a href="<%=path%>/leave/list/finished">已结束流程</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -54,7 +49,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${user.getFirstName()}  ${user.getLastName()} <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${userid} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">个人信息</a></li>
                         <li role="separator" class="divider"></li>
@@ -76,13 +71,12 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>执行者</th>
+                <th>请假人</th>
                 <th>申请时间</th>
                 <th>结束时间</th>
                 <th>当前节点</th>
                 <th>任务创建时间</th>
                 <th>流程状态</th>
-                <th>使用工具</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -101,7 +95,6 @@
                         <%--<td><a target="_blank" href='${ctx }/workflow/resource/process-instance?pid=${pi.id }&type=xml'>${task.name }</a></td> --%>
                     <td>${task.createTime }</td>
                     <td>${pi.suspended ? "已挂起" : "正常" }；<b title='流程版本号'>V: ${experiment.processDefinition.version }</b></td>
-                    <td><span class="label label-info">${task.description}</span></td>
                     <td>
                         <c:if test="${empty task.assignee }">
                             <a href="<%=path%>/experiment/task/claim/${task.id}" class="btn btn-info btn-sm">签收</a>
@@ -126,11 +119,11 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 <h4 class="modal-title" id="model1"> <span class="glyphicon glyphicon-edit"> 请假表单</span></h4>
             </div>
-            <div class="modal-body">
-                <form>
+            <form action="<%=path%>/workflow/processinstance/start/leave" method="post">
+                <div class="modal-body">
                     <div class="form-group">
                         <label for="type">选择假种</label>
-                        <select class="form-control" id="type">
+                        <select class="form-control" id="type" name="leaveType">
                             <option selected> </option>
                             <option>事假</option>
                             <option>病假</option>
@@ -164,15 +157,15 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="reason">文本框</label>
-                        <textarea class="form-control" rows="3" id="reason"></textarea>
+                        <label for="reason">请假原因</label>
+                        <textarea class="form-control" rows="3" id="reason" name="reason" placeholder="简单描述一下您请假的缘由..."></textarea>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">提交</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">提交</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

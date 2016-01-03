@@ -1,10 +1,11 @@
 package com.amayadream.leave.activiti.controller.activiti;
 
+import com.alibaba.fastjson.JSON;
 import com.amayadream.leave.activiti.service.leave.LeaveWorkflowService;
 import com.amayadream.leave.pojo.Leave;
-import com.amayadream.leave.util.Page;
-import com.amayadream.leave.util.PageUtil;
-import com.amayadream.leave.util.UserUtil;
+import com.amayadream.leave.pojo.Log;
+import com.amayadream.leave.service.ILogService;
+import com.amayadream.leave.util.*;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -15,11 +16,14 @@ import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -28,8 +32,13 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/workflow/processinstance")
+@SessionAttributes("userid")
 public class ProcessInstanceController {
 
+    @Resource
+    private ILogService logService;
+    @Resource
+    private Log log;
     @Autowired
     private RuntimeService runtimeService;
     @Autowired
@@ -56,13 +65,18 @@ public class ProcessInstanceController {
         return mav;
     }
 
-    @RequestMapping(value = "start/{id}")
-    public String start(@PathVariable("id") String id, Leave leave, RedirectAttributes redirectAttributes, HttpSession session) {
+    @RequestMapping(value = "start/{key}")
+    public String start(@PathVariable("key") String key, @ModelAttribute("userid") String userid, Leave leave, RedirectAttributes redirectAttributes, DateUtil dateUtil, LogUtil logUtil) {
         try {
-            org.activiti.engine.identity.User user = UserUtil.getUserFromSession(session);
-            leave.setUserid(user.getId());
+            leave.setUserid(userid);
+            leave.setApplytime(dateUtil.getDateTime24());
             Map<String, Object> variables = new HashMap<String, Object>();
-            ProcessInstance processInstance = workflowService.start(id, leave, variables);
+            ProcessInstance processInstance = workflowService.start(key, leave, variables);
+            log.setUserid(userid);
+            log.setTime(dateUtil.getDateTime24());
+            log.setType(logUtil.LOG_TYPE_START);
+            log.setDetail(logUtil.LOG_DETAIL_LEAVE);
+            logService.insert(log);
             redirectAttributes.addFlashAttribute("message", "流程已启动，流程ID：" + processInstance.getId());
         }
         catch (ActivitiException e) {
@@ -72,7 +86,7 @@ public class ProcessInstanceController {
                 redirectAttributes.addFlashAttribute("error", "系统内部错误！");
             }
         }
-        return "redirect:/experiment/list/task";
+        return "redirect:/leave/list/task";
     }
 
   /**

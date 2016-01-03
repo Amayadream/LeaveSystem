@@ -24,8 +24,8 @@ public class Leave {
     private String leaveType;           //假种
     private String reason;              //请假原因
     private String applytime;           //申请时间
-    private String realitystarttime;    //实际开始时间
-    private String realityendtime;      //实际结束时间
+    private String realiystarttime;    //实际开始时间
+    private String realiyendtime;      //实际结束时间
 
     // -- 临时属性 -- //
     private Task task;       //流程任务
@@ -102,20 +102,20 @@ public class Leave {
         this.applytime = applytime;
     }
 
-    public String getRealitystarttime() {
-        return realitystarttime;
+    public String getRealiystarttime() {
+        return realiystarttime;
     }
 
-    public void setRealitystarttime(String realitystarttime) {
-        this.realitystarttime = realitystarttime;
+    public void setRealiystarttime(String realiystarttime) {
+        this.realiystarttime = realiystarttime;
     }
 
-    public String getRealityendtime() {
-        return realityendtime;
+    public String getRealiyendtime() {
+        return realiyendtime;
     }
 
-    public void setRealityendtime(String realityendtime) {
-        this.realityendtime = realityendtime;
+    public void setRealiyendtime(String realiyendtime) {
+        this.realiyendtime = realiyendtime;
     }
 
     public Task getTask() {

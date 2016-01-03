@@ -3,7 +3,7 @@
 <mapper namespace="com.amayadream.leave.dao.ILeaveDao" >
 
   <resultMap id="BaseResultMap" type="com.amayadream.leave.pojo.Leave" >
-    <id column="ID" property="groupid" jdbcType="VARCHAR" />
+    <id column="ID" property="id" jdbcType="VARCHAR" />
     <result column="PROCESSINSTANCEID" property="processinstanceid" jdbcType="VARCHAR" />
     <result column="USERID" property="userid" jdbcType="VARCHAR" />
     <result column="STARTTIME" property="starttime" jdbcType="VARCHAR" />
@@ -11,12 +11,12 @@
     <result column="LEAVETYPE" property="leaveType" jdbcType="VARCHAR" />
     <result column="REASON" property="reason" jdbcType="VARCHAR" />
     <result column="APPLYTIME" property="applytime" jdbcType="VARCHAR" />
-    <result column="REALITYSTARTTIME" property="realitystarttime" jdbcType="VARCHAR" />
-    <result column="REALITYENDTIME" property="realityendtime" jdbcType="VARCHAR" />
+    <result column="REALIYSTARTTIME" property="realiystarttime" jdbcType="VARCHAR" />
+    <result column="REALIYENDTIME" property="realiyendtime" jdbcType="VARCHAR" />
   </resultMap>
 
   <sql id="Base_Column_List" >
-    ID, PROCESSINSTANCEID, USERID, STARTTIME, ENDTIME, LEAVETYPE, REASON, APPLYTIME, REALITYSTARTTIME, REALITYENDTIME
+    ID, PROCESSINSTANCEID, USERID, STARTTIME, ENDTIME, LEAVETYPE, REASON, APPLYTIME, REALIYSTARTTIME, REALIYENDTIME
   </sql>
 
   <!-- 查询所有用户 -->
@@ -46,15 +46,18 @@
     <selectKey keyProperty="id" resultType="String" order="BEFORE">
       select sys_guid() from dual
     </selectKey>
-    INSERT INTO EXPERIMENT (ID, PROCESSINSTANCEID, USERID, STARTTIME, ENDTIME, LEAVETYPE, REASON, APPLYTIME, REALITYSTARTTIME, REALITYENDTIME)
+    INSERT INTO LEAVE (ID, PROCESSINSTANCEID, USERID, STARTTIME, ENDTIME, LEAVETYPE, REASON, APPLYTIME, REALIYSTARTTIME, REALIYENDTIME)
     VALUES (#{id,jdbcType=VARCHAR}, #{processinstanceid, jdbcType=VARCHAR}, #{userid, jdbcType=VARCHAR}, #{starttime, jdbcType=VARCHAR},
-    #{endtime, jdbcType=VARCHAR}, #{leaveType, jdbcType=VARCHAR}, #{reason, jdbcType=VARCHAR}, #{applytime, jdbcType=VARCHAR},#{realitystarttime, jdbcType=VARCHAR}, #{realityendtime, jdbcType=VARCHAR})
+    #{endtime, jdbcType=VARCHAR}, #{leaveType, jdbcType=VARCHAR}, #{reason, jdbcType=VARCHAR}, #{applytime, jdbcType=VARCHAR},#{realiystarttime, jdbcType=VARCHAR}, #{realiyendtime, jdbcType=VARCHAR})
   </insert>
 
   <!-- 更新 -->
   <update id="update" parameterType="com.amayadream.leave.pojo.Leave">
     UPDATE LEAVE
     <set>
+      <if test="processinstanceid != null and processinstanceid != ''">
+        PROCESSINSTANCEID = #{processinstanceid, jdbcType=VARCHAR},
+      </if>
       <if test="starttime != null and starttime != ''">
         STARTTIME = #{starttime, jdbcType=VARCHAR},
       </if>
@@ -70,14 +73,14 @@
       <if test="applytime != null and applytime != ''">
         APPLYTIME = #{applytime, jdbcType=VARCHAR},
       </if>
-      <if test="realitystarttime != null and realitystarttime != ''">
-        REALITYSTARTTIME = #{realitystarttime, jdbcType=VARCHAR},
+      <if test="realiystarttime != null and realiystarttime != ''">
+        REALIYSTARTTIME = #{REALIYSTARTTIME, jdbcType=VARCHAR},
       </if>
-      <if test="realityendtime != null and realityendtime != ''">
-        REALITYENDTIME = #{realityendtime, jdbcType=VARCHAR},
+      <if test="realiyendtime != null and realiyendtime != ''">
+        REALIYENDTIME = #{realiyendtime, jdbcType=VARCHAR},
       </if>
     </set>
-    WHERE GROUPID = #{groupid, jdbcType=VARCHAR}
+    WHERE ID = #{id, jdbcType=VARCHAR}
   </update>
 
   <!-- 删除用户 -->
