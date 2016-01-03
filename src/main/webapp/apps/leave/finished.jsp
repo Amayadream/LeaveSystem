@@ -62,7 +62,10 @@
             <th>#</th>
             <th>请假人</th>
             <th>申请时间</th>
-            <th>结束时间</th>
+            <th>申请开始时间</th>
+            <th>申请结束时间</th>
+            <th>实际开始时间</th>
+            <th>实际结束时间</th>
             <th>流程启动时间</th>
             <th>流程结束时间</th>
             <th>流程结束原因</th>
@@ -75,7 +78,10 @@
             <tr id="${leave.id }" tid="${task.id }">
                 <td>${status.index + 1}</td>
                 <td>${leave.userid }</td>
+                <td>${leave.applytime }</td>
                 <td>${leave.starttime }</td>
+                <td>${leave.realiystarttime }</td>
+                <td>${leave.realiyendtime }</td>
                 <td>${leave.endtime }</td>
                 <td>${hpi.startTime }</td>
                 <td>${hpi.endTime }</td>

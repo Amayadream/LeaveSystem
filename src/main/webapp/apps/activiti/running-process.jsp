@@ -145,7 +145,7 @@
     $.scojs_message("${message}", $.scojs_message.TYPE_OK);
     </c:if>
     function showPage(id){
-        $("#img").attr("src",'<%=path%>/workflow/process/trace/auto/'+id).css("width",500).css("height",400);
+        $("#img").attr("src",'<%=path%>/workflow/process/trace/auto/'+id);
         $("#show-model").modal();
     }
 </script>

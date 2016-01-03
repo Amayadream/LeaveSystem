@@ -99,9 +99,8 @@ public class ExperimentController {
    * 签收任务
    */
   @RequestMapping(value = "task/claim/{id}")
-  public String claim(@PathVariable("id") String taskId, HttpSession session, RedirectAttributes redirectAttributes) {
-    String userId = UserUtil.getUserFromSession(session).getId();
-    taskService.claim(taskId, userId);
+  public String claim(@PathVariable("id") String taskId, @ModelAttribute("userid") String userid, HttpSession session, RedirectAttributes redirectAttributes) {
+    taskService.claim(taskId, userid);
     redirectAttributes.addFlashAttribute("message", "任务已签收");
     return "redirect:/leave/list/task";
   }

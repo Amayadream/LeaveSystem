@@ -2,7 +2,6 @@ package com.amayadream.leave.activiti.service.leave;
 
 import com.amayadream.leave.pojo.Leave;
 import com.amayadream.leave.service.ILeaveService;
-import com.amayadream.leave.util.DateUtil;
 import com.amayadream.leave.util.Page;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
@@ -48,8 +47,6 @@ public class LeaveWorkflowService {
      * @return
      */
   public ProcessInstance start(String key, Leave leave, Map<String, Object> variables){
-    DateUtil dateUtil = new DateUtil();
-    leave.setStarttime(dateUtil.getDateTime24());
     leaveService.insert(leave);
     String businessKey = leave.getId();
     // 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中

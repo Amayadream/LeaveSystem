@@ -62,7 +62,8 @@
             <th>#</th>
             <th>请假人</th>
             <th>申请时间</th>
-            <th>结束时间</th>
+            <th>申请开始时间</th>
+            <th>申请结束时间</th>
             <th>当前节点</th>
             <th>任务创建时间</th>
             <th>流程状态</th>
@@ -76,6 +77,7 @@
             <tr id="${leave.id }" tid="${task.id }">
                 <td>${status.index +1}</td>
                 <td>${leave.userid }</td>
+                <td>${leave.applytime }</td>
                 <td>${leave.starttime }</td>
                 <td>${leave.endtime }</td>
                 <td>
@@ -112,7 +114,7 @@
 
 <script>
     function showPage(id){
-        $("#img").attr("src",'<%=path%>/workflow/process/trace/auto/'+id).css("width",500).css("height",400);
+        $("#img").attr("src",'<%=path%>/workflow/process/trace/auto/'+id);
         $("#show-model").modal();
     }
 </script>

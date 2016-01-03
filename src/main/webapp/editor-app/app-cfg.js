@@ -21,5 +21,5 @@
 var ACTIVITI = ACTIVITI || {};
 
 ACTIVITI.CONFIG = {
-	'contextRoot' : '/Activiti-demo/service',
+	'contextRoot' : '/LeaveSystem/service',
 };

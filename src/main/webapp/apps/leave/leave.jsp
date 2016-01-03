@@ -73,35 +73,32 @@
                 <th>#</th>
                 <th>请假人</th>
                 <th>申请时间</th>
-                <th>结束时间</th>
+                <th>申请开始时间</th>
+                <th>申请结束时间</th>
                 <th>当前节点</th>
-                <th>任务创建时间</th>
-                <th>流程状态</th>
                 <th>操作</th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${page.result }" var="experiment" varStatus="status">
-                <c:set var="task" value="${experiment.task }" />
-                <c:set var="pi" value="${experiment.processInstance }" />
-                <tr id="${experiment.id }" tid="${task.id }">
+            <c:forEach items="${page.result }" var="leave" varStatus="status">
+                <c:set var="task" value="${leave.task }" />
+                <c:set var="pi" value="${leave.processInstance }" />
+                <tr id="${leave.id }" tid="${task.id }">
                     <td>${status.index + 1}</td>
-                    <td>${experiment.userid }</td>
-                    <td>${experiment.starttime }</td>
-                    <td>${experiment.endtime }</td>
+                    <td>${leave.userid }</td>
+                    <td>${leave.applytime }</td>
+                    <td>${leave.starttime }</td>
+                    <td>${leave.endtime }</td>
                     <td>
                         <button class="btn btn-primary btn-sm show" id="${pi.id}" onclick="showPage('${pi.id}');">${task.name }</button>
                     </td>
                         <%--<td><a target="_blank" href='${ctx }/workflow/resource/process-instance?pid=${pi.id }&type=xml'>${task.name }</a></td> --%>
-                    <td>${task.createTime }</td>
-                    <td>${pi.suspended ? "已挂起" : "正常" }；<b title='流程版本号'>V: ${experiment.processDefinition.version }</b></td>
                     <td>
                         <c:if test="${empty task.assignee }">
-                            <a href="<%=path%>/experiment/task/claim/${task.id}" class="btn btn-info btn-sm">签收</a>
+                            <a href="<%=path%>/leave/task/claim/${task.id}" class="btn btn-info btn-sm">签收</a>
                         </c:if>
                         <c:if test="${not empty task.assignee }">
-                            <a href="<%=path%>/experiment/complete1/${task.id}/false" class="btn btn-danger btn-sm">回退</a>
-                            <a href="<%=path%>/experiment/complete1/${task.id}/true" class="btn btn-success btn-sm">继续</a>
+                            <a href="<%=path%>/leave/complete1/${task.id}/false" class="btn btn-success btn-sm">办理</a>
                         </c:if>
                     </td>
                 </tr>
@@ -227,7 +224,7 @@
     $.scojs_message("${message}", $.scojs_message.TYPE_OK);
     </c:if>
     function showPage(id){
-        $("#img").attr("src",'<%=path%>/workflow/process/trace/auto/'+id).css("width",500).css("height",400);
+        $("#img").attr("src",'<%=path%>/workflow/process/trace/auto/'+id);
         $("#show-model").modal();
     }
     function startLeave(){
