@@ -42,19 +42,19 @@ public class LeaveWorkflowService {
 
   /**
    * 根据key启动流程
-   * @param id
+   * @param key
    * @param leave
    * @param variables
      * @return
      */
-  public ProcessInstance start(String id, Leave leave, Map<String, Object> variables){
+  public ProcessInstance start(String key, Leave leave, Map<String, Object> variables){
     DateUtil dateUtil = new DateUtil();
     leave.setStarttime(dateUtil.getDateTime24());
     leaveService.insert(leave);
     String businessKey = leave.getId();
     // 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
     identityService.setAuthenticatedUserId(leave.getUserid());
-    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(id, businessKey, variables);
+    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key, businessKey, variables);
     String processInstanceId = processInstance.getId();
     leave.setProcessinstanceid(processInstanceId);
     leaveService.update(leave);
@@ -99,7 +99,6 @@ public class LeaveWorkflowService {
       leave.setProcessDefinition(getProcessDefinition(processInstance.getProcessDefinitionId()));
       results.add(leave);
     }
-    
     page.setTotalCount(todoQuery.count() + claimQuery.count());
     page.setResult(results);
     return results;

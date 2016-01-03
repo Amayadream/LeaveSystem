@@ -54,7 +54,7 @@ public class ModelController {
    */
   @RequestMapping(value = "list")
   public ModelAndView modelList() {
-    ModelAndView mav = new ModelAndView("model-list");
+    ModelAndView mav = new ModelAndView("apps/activiti/model-manage");
     List<Model> list = repositoryService.createModelQuery().list();
     mav.addObject("list", list);
     return mav;

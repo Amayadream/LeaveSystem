@@ -44,7 +44,7 @@ public class LoginController {
                 logService.insert(log);
                 session.setAttribute("user",user);
                 session.setAttribute("userid",user.getUserid());
-                return "redirect:/index";
+                return "redirect:/leave/list/task";
             }else{
                 redirectAttributes.addFlashAttribute("error","用户名或密码错误!请重新登陆!");
                 return "redirect:/login";
@@ -58,6 +58,7 @@ public class LoginController {
     @RequestMapping(value = "logout")
     public String logout(HttpSession session, RedirectAttributes redirectAttributes){
         session.removeAttribute("user");
+        session.removeAttribute("userid");
         redirectAttributes.addFlashAttribute("message","注销成功!");
         return "redirect:/login";
     }

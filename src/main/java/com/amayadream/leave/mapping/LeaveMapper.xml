@@ -30,7 +30,6 @@
     SELECT <include refid="Base_Column_List" />
     FROM LEAVE
     WHERE ID = #{id, jdbcType=VARCHAR}
-    )
   </select>
 
   <!-- 根据用户id查询用户 -->

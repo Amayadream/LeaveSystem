@@ -91,7 +91,7 @@ public class ActivitiController {
    */
   @RequestMapping(value = "/process-list")
   public ModelAndView processList(HttpServletRequest request) {
-    ModelAndView mav = new ModelAndView("process-list");
+    ModelAndView mav = new ModelAndView("apps/activiti/deploy-manage");
 
     /*
      * 保存两个对象，一个是ProcessDefinition（流程定义），一个是Deployment（流程部署）

@@ -1,31 +1,22 @@
-<%@ page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
-<%@ page import="org.activiti.engine.RepositoryService" %>
-<%@ page import="com.amayadream.leave.util.ProcessDefinitionCache" %>
-<%@ page import="org.apache.commons.lang3.ObjectUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%String path = request.getContextPath();%>
 <html>
 <head>
-    <title>工作区|运行中的流程</title>
+    <title>实验管理|运行中的流程</title>
     <link href="<%=path%>/plugins/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="<%=path%>/plugins/scojs/css/scojs.css" type="text/css" rel="stylesheet">
     <link href="<%=path%>/plugins/scojs/css/sco.message.css" type="text/css" rel="stylesheet">
     <script src="<%=path%>/plugins/jquery/jquery-2.1.4.min.js"></script>
-    <script src="<%=path%>/static/activiti/common.js"></script>
     <script src="<%=path%>/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="<%=path%>/plugins/scojs/js/sco.message.js"></script>
     <script type="text/javascript">
-    </script>
-    <script type="text/javascript">
-        var ctx = '<%=request.getContextPath() %>';
+        function add(){
+            $("#add-model").modal();
+        }
     </script>
 </head>
 <body>
-<%
-    RepositoryService repositoryService = WebApplicationContextUtils.getWebApplicationContext(session.getServletContext()).getBean(org.activiti.engine.RepositoryService.class);
-    ProcessDefinitionCache.setRepositoryService(repositoryService);
-%>
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -53,8 +44,8 @@
                     <ul class="dropdown-menu">
                         <li><a href="<%=path%>/workflow/process-list">流程定义与部署管理 </a></li>
                         <li><a href="<%=path%>/workflow/processinstance/process-list">所有流程 </a></li>
-                        <li class="active"><a href="<%=path%>/workflow/processinstance/running">在运行流程</a></li>
-                        <li><a href="<%=path%>/workflow/model/list">模型工作区</a></li>
+                        <li><a href="<%=path%>/workflow/processinstance/running">在运行流程</a></li>
+                        <li class="active"><a href="<%=path%>/workflow/model/list">模型工作区</a></li>
                     </ul>
                 </li>
             </ul>
@@ -74,65 +65,80 @@
 
 <div>
     <div class="well">
-        <h1>工作区/<small>运行中的流程</small></h1>
+        <h1>工作区/<small>模型工作区</small></h1>
+    </div>
+    <div class="well">
+        <button class="btn btn-success" style="float:right;" onclick="javascript:add()">创建模型</button>
     </div>
     <div class="well">
         <table class="table table-bordered">
+            <thead>
             <tr>
-                <th>执行IDssss</th>
-                <th>流程实例ID</th>
-                <th>流程定义ID</th>
-                <th>当前节点</th>
-                <th>是否挂起</th>
+                <th>ID</th>
+                <th>KEY</th>
+                <th>Name</th>
+                <th>Version</th>
+                <th>创建时间</th>
+                <th>最后更新时间</th>
+                <th>元数据</th>
                 <th>操作</th>
             </tr>
-
-            <c:forEach items="${page.result }" var="p">
-                <c:set var="pdid" value="${p.processDefinitionId }" />
-                <c:set var="activityId" value="${p.activityId }" />
+            </thead>
+            <tbody>
+            <c:forEach items="${list }" var="model">
                 <tr>
-                    <td>${p.id }</td>
-                    <td>${p.processInstanceId }</td>
-                    <td>${p.processDefinitionId }</td>
-                    <td><button class="btn btn-primary btn-sm show" id="${p.id}" onclick="showPage('${p.id}');"><%=ProcessDefinitionCache.getActivityName(pageContext.getAttribute("pdid").toString(), ObjectUtils.toString(pageContext.getAttribute("activityId"))) %></button></td>
+                    <td>${model.id }</td>
+                    <td>${model.key }</td>
+                    <td>${model.name}</td>
+                    <td>${model.version}</td>
+                    <td>${model.createTime}</td>
+                    <td>${model.lastUpdateTime}</td>
+                    <td>${model.metaInfo}</td>
                     <td>
-                        <c:if test="${p.suspended}">
-                            <span class="label label-danger">已挂起</span>
-                        </c:if>
-                        <c:if test="${!p.suspended}">
-                            <span class="label label-success">正常</span>
-                        </c:if>
-                    </td>
-                    <td>
-                        <c:if test="${p.suspended }">
-                            <a href="<%=path%>/workflow/processinstance/update/active/${p.processInstanceId}" class="btn btn-sm btn-success">激活</a>
-                        </c:if>
-                        <c:if test="${!p.suspended }">
-                            <a href="<%=path%>/workflow/processinstance/update/suspend/${p.processInstanceId}" class="btn btn-sm btn-danger">挂起</a>
-                        </c:if>
+                        <a href="<%=path%>/modeler.html?modelId=${model.id}" target="_blank">编辑</a>
+                        <a href="<%=path%>/workflow/model/getXml/${model.id}" target="_blank">角色工具</a>
+                        <a href="<%=path%>/workflow/model/deploy/${model.id}">部署</a>
+                        导出(<a href="<%=path%>/workflow/model/export/${model.id}/bpmn" target="_blank">BPMN</a>
+                        |&nbsp;<a href="<%=path%>/workflow/model/export/${model.id}/json" target="_blank">JSON</a>)
+                        <a href="<%=path%>/workflow/model/delete/${model.id}">删除</a>
                     </td>
                 </tr>
             </c:forEach>
+            </tbody>
         </table>
     </div>
 </div>
 
-<!-- 图形模态框 -->
-<div class="modal fade" id="show-model" tabindex="-1" role="dialog" aria-labelledby="model2" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<!-- 添加模态框 -->
+<div class="modal fade" id="add-model" tabindex="-1" role="dialog" aria-labelledby="model2" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title" id="model2">
-                    <span class="glyphicon glyphicon-search"></span> 流程图
+                    <span class="glyphicon glyphicon-edit"></span> 添加模型
                 </h4>
             </div>
-            <div class="modal-body">
-                <img src="" id="img">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> 关闭</button>
-            </div>
+            <form action="<%=path%>/workflow/model/create" method="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name">模型名称</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="这里输入模型的名称...">
+                    </div>
+                    <div class="form-group">
+                        <label for="key">关键字</label>
+                        <input type="text" class="form-control" id="key" name="key" placeholder="这里输入模型的关键字">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">描述</label>
+                        <textarea id="description" class="form-control" rows="2" id="description" name="description" placeholder="这里输入模型的描述..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">提交</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> 关闭</button>
+                </div>
+            </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -144,10 +150,6 @@
     <c:if test="${not empty message}">
     $.scojs_message("${message}", $.scojs_message.TYPE_OK);
     </c:if>
-    function showPage(id){
-        $("#img").attr("src",'<%=path%>/workflow/process/trace/auto/'+id).css("width",500).css("height",400);
-        $("#show-model").modal();
-    }
 </script>
 </body>
 </html>

@@ -72,7 +72,7 @@ public class ExperimentController {
    */
   @RequestMapping(value = "list/running")
   public ModelAndView runningList(HttpServletRequest request) {
-    ModelAndView mav = new ModelAndView("/running");
+    ModelAndView mav = new ModelAndView("/apps/leave/running");
     Page<Leave> page = new Page<Leave>(PageUtil.PAGE_SIZE);
     int[] pageParams = PageUtil.init(page, request);
     workflowService.findRunningProcessInstaces(page, pageParams);
@@ -87,7 +87,7 @@ public class ExperimentController {
    */
   @RequestMapping(value = "list/finished")
   public ModelAndView finishedList(HttpServletRequest request) {
-    ModelAndView mav = new ModelAndView("/finished");
+    ModelAndView mav = new ModelAndView("/apps/leave/finished");
     Page<Leave> page = new Page<Leave>(PageUtil.PAGE_SIZE);
     int[] pageParams = PageUtil.init(page, request);
     workflowService.findFinishedProcessInstaces(page, pageParams);

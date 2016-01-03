@@ -4,17 +4,17 @@
     <startEvent id="Start" name="开始" activiti:initiator="applyUserId"></startEvent>
     <userTask id="LeaderApproval" name="部门领导审批" activiti:candidateGroups="leader"></userTask>
     <sequenceFlow id="flow1" sourceRef="Start" targetRef="LeaderApproval"></sequenceFlow>
-    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <exclusiveGateway id="exclusivegateway1"></exclusiveGateway>
     <sequenceFlow id="flow2" sourceRef="LeaderApproval" targetRef="exclusivegateway1"></sequenceFlow>
     <userTask id="PersonnelApproval" name="人事审批" activiti:candidateGroups="personnel"></userTask>
     <sequenceFlow id="flow3" name="同意" sourceRef="exclusivegateway1" targetRef="PersonnelApproval" skipExpression="${Leaderpass}"></sequenceFlow>
-    <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
+    <exclusiveGateway id="exclusivegateway2"></exclusiveGateway>
     <sequenceFlow id="flow4" sourceRef="PersonnelApproval" targetRef="exclusivegateway2"></sequenceFlow>
     <userTask id="BackFromLeave" name="销假" activiti:assignee="${applyUserId}"></userTask>
     <userTask id="ChangeApply" name="调整申请" activiti:assignee="${applyUserId}"></userTask>
     <sequenceFlow id="flow6" name="驳回" sourceRef="exclusivegateway1" targetRef="ChangeApply" skipExpression="${!Leaderpass}"></sequenceFlow>
     <sequenceFlow id="flow7" name="驳回" sourceRef="exclusivegateway2" targetRef="ChangeApply" skipExpression="${!Personnelpass}"></sequenceFlow>
-    <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway"></exclusiveGateway>
+    <exclusiveGateway id="exclusivegateway3"></exclusiveGateway>
     <sequenceFlow id="flow8" sourceRef="ChangeApply" targetRef="exclusivegateway3"></sequenceFlow>
     <sequenceFlow id="flow9" name="重新申请" sourceRef="exclusivegateway3" targetRef="LeaderApproval" skipExpression="${Reapply}"></sequenceFlow>
     <endEvent id="End" name="结束"></endEvent>
@@ -108,7 +108,7 @@
         <omgdi:waypoint x="555.0" y="89.0"></omgdi:waypoint>
         <omgdi:waypoint x="600.0" y="89.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="16.0" width="100.0" x="554.0" y="70.0"></omgdc:Bounds>
+          <omgdc:Bounds height="16.0" width="32.0" x="554.0" y="70.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">

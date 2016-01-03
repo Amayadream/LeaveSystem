@@ -86,32 +86,5 @@
         </tbody>
     </table>
 </div>
-
-<!-- 删除模态框 -->
-<div class="modal fade" id="show-model" tabindex="-1" role="dialog" aria-labelledby="model2" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="model2">
-                    <span class="glyphicon glyphicon-search"></span> 流程图
-                </h4>
-            </div>
-            <div class="modal-body">
-                <img src="" id="img">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> 关闭</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<script>
-    function showPage(id){
-        $("#img").attr("src",'<%=path%>/workflow/process/trace/auto/'+id).css("width",500).css("height",400);
-        $("#show-model").modal();
-    }
-</script>
 </body>
 </html>

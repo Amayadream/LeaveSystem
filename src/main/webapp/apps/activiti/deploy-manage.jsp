@@ -1,31 +1,27 @@
-<%@ page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
-<%@ page import="org.activiti.engine.RepositoryService" %>
-<%@ page import="com.amayadream.leave.util.ProcessDefinitionCache" %>
-<%@ page import="org.apache.commons.lang3.ObjectUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%String path = request.getContextPath();%>
 <html>
 <head>
-    <title>工作区|运行中的流程</title>
+    <title>实验管理|运行中的流程</title>
     <link href="<%=path%>/plugins/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="<%=path%>/plugins/scojs/css/scojs.css" type="text/css" rel="stylesheet">
     <link href="<%=path%>/plugins/scojs/css/sco.message.css" type="text/css" rel="stylesheet">
     <script src="<%=path%>/plugins/jquery/jquery-2.1.4.min.js"></script>
-    <script src="<%=path%>/static/activiti/common.js"></script>
     <script src="<%=path%>/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="<%=path%>/plugins/scojs/js/sco.message.js"></script>
     <script type="text/javascript">
     </script>
     <script type="text/javascript">
-        var ctx = '<%=request.getContextPath() %>';
+        $(function(){
+            $('#deploy').click(function() {
+                $('#deployForm').slideToggle('fast');
+                return false;
+            });
+        });
     </script>
 </head>
 <body>
-<%
-    RepositoryService repositoryService = WebApplicationContextUtils.getWebApplicationContext(session.getServletContext()).getBean(org.activiti.engine.RepositoryService.class);
-    ProcessDefinitionCache.setRepositoryService(repositoryService);
-%>
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -51,9 +47,9 @@
                 <li class="dropdown active">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">工作区 <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="<%=path%>/workflow/process-list">流程定义与部署管理 </a></li>
+                        <li class="active"><a href="<%=path%>/workflow/process-list">流程定义与部署管理 </a></li>
                         <li><a href="<%=path%>/workflow/processinstance/process-list">所有流程 </a></li>
-                        <li class="active"><a href="<%=path%>/workflow/processinstance/running">在运行流程</a></li>
+                        <li><a href="<%=path%>/workflow/processinstance/running">在运行流程</a></li>
                         <li><a href="<%=path%>/workflow/model/list">模型工作区</a></li>
                     </ul>
                 </li>
@@ -74,52 +70,67 @@
 
 <div>
     <div class="well">
-        <h1>工作区/<small>运行中的流程</small></h1>
+        <h2>工作区/<small>流程定义及部署管理</small></h2>
     </div>
     <div class="well">
+        <button class="btn btn-primary" id="deploy" style="float:right">部署流程</button>
+        <div id="deployForm" style="display: none">
+            <h3>部署新流程/<small>支持的格式有:zip、bar、bpmn、bpmn20.xml</small></h3>
+            <form action="<%=path%>/workflow/deploy" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" />
+                <input type="submit" value="提交" />
+            </form>
+        </div>
         <table class="table table-bordered">
+            <thead>
             <tr>
-                <th>执行IDssss</th>
-                <th>流程实例ID</th>
-                <th>流程定义ID</th>
-                <th>当前节点</th>
-                <th>是否挂起</th>
-                <th>操作</th>
+                <th>ProcessDefinitionId</th>
+                <th>DeploymentId</th>
+                <th>名称</th>
+                <th>KEY</th>
+                <th>版本号</th>
+                <th>XML</th>
+                <th>图片</th>
+                <th>部署时间</th>
+                <th width="10%">是否挂起</th>
+                <th width="15%">操作</th>
             </tr>
-
-            <c:forEach items="${page.result }" var="p">
-                <c:set var="pdid" value="${p.processDefinitionId }" />
-                <c:set var="activityId" value="${p.activityId }" />
+            </thead>
+            <tbody>
+            <c:forEach items="${page.result }" var="object">
+                <c:set var="process" value="${object[0] }" />
+                <c:set var="deployment" value="${object[1] }" />
                 <tr>
-                    <td>${p.id }</td>
-                    <td>${p.processInstanceId }</td>
-                    <td>${p.processDefinitionId }</td>
-                    <td><button class="btn btn-primary btn-sm show" id="${p.id}" onclick="showPage('${p.id}');"><%=ProcessDefinitionCache.getActivityName(pageContext.getAttribute("pdid").toString(), ObjectUtils.toString(pageContext.getAttribute("activityId"))) %></button></td>
+                    <td>${process.id }</td>
+                    <td>${process.deploymentId }</td>
+                    <td>${process.name }</td>
+                    <td>${process.key }</td>
+                    <td>${process.version }</td>
+                    <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=xml'>${process.resourceName }</a></td>
+                    <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=image'>${process.diagramResourceName }</a></td>
+                    <td>${deployment.deploymentTime }</td>
                     <td>
-                        <c:if test="${p.suspended}">
-                            <span class="label label-danger">已挂起</span>
+                        <c:if test="${process.suspended }">
+                            <span class="label label-danger">已挂起</span>  <a href="processdefinition/update/active/${process.id}" class="btn btn-sm btn-success">激活</a>
                         </c:if>
-                        <c:if test="${!p.suspended}">
-                            <span class="label label-success">正常</span>
+                        <c:if test="${!process.suspended }">
+                            <span class="label label-success">已激活</span>  <a href="processdefinition/update/suspend/${process.id}" class="btn btn-sm btn-danger">挂起</a>
                         </c:if>
                     </td>
                     <td>
-                        <c:if test="${p.suspended }">
-                            <a href="<%=path%>/workflow/processinstance/update/active/${p.processInstanceId}" class="btn btn-sm btn-success">激活</a>
-                        </c:if>
-                        <c:if test="${!p.suspended }">
-                            <a href="<%=path%>/workflow/processinstance/update/suspend/${p.processInstanceId}" class="btn btn-sm btn-danger">挂起</a>
-                        </c:if>
+                        <a href='<%=path%>/workflow/process/delete?deploymentId=${process.deploymentId}' class="btn btn-sm btn-danger">删除</a>
+                        <a href='<%=path%>/workflow/process/convert-to-model/${process.id}' class="btn btn-sm btn-success">转换为Model</a>
                     </td>
                 </tr>
             </c:forEach>
+            </tbody>
         </table>
     </div>
 </div>
 
-<!-- 图形模态框 -->
+<!-- 删除模态框 -->
 <div class="modal fade" id="show-model" tabindex="-1" role="dialog" aria-labelledby="model2" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -144,10 +155,6 @@
     <c:if test="${not empty message}">
     $.scojs_message("${message}", $.scojs_message.TYPE_OK);
     </c:if>
-    function showPage(id){
-        $("#img").attr("src",'<%=path%>/workflow/process/trace/auto/'+id).css("width",500).css("height",400);
-        $("#show-model").modal();
-    }
 </script>
 </body>
 </html>

@@ -54,7 +54,7 @@ public class ProcessInstanceController {
      */
     @RequestMapping(value = "process-list")
     public ModelAndView all(Model model, HttpServletRequest request){
-        ModelAndView mav = new ModelAndView("/all-process-list");
+        ModelAndView mav = new ModelAndView("/apps/activiti/start-process");
         Page<ProcessDefinition> page = new Page<ProcessDefinition>(PageUtil.PAGE_SIZE);
         int[] pageParams = PageUtil.init(page, request);
         ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery().active().orderByDeploymentId().desc();
@@ -97,7 +97,7 @@ public class ProcessInstanceController {
      */
   @RequestMapping(value = "running")
   public ModelAndView running(Model model, HttpServletRequest request) {
-    ModelAndView mav = new ModelAndView("running-manage");
+    ModelAndView mav = new ModelAndView("apps/activiti/running-process");
     Page<ProcessInstance> page = new Page<ProcessInstance>(PageUtil.PAGE_SIZE);
     int[] pageParams = PageUtil.init(page, request);
 
