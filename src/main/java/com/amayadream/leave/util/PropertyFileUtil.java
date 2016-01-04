@@ -19,7 +19,6 @@ import java.util.*;
  * 系统属性工具类
  *
  * @author HenryYan
- *
  */
 public class PropertyFileUtil {
 
@@ -33,10 +32,10 @@ public class PropertyFileUtil {
 
     /**
      * 初始化读取配置文件，读取的文件列表位于classpath下面的application-files.properties<br/>
-     *
+     * <p>
      * 多个配置文件会用最后面的覆盖相同属性值
      *
-     * @throws IOException	读取属性文件时
+     * @throws IOException 读取属性文件时
      */
     public static void init() throws IOException {
         String fileNames = "application-files.properties";
@@ -45,12 +44,11 @@ public class PropertyFileUtil {
 
     /**
      * 初始化读取配置文件，读取的文件列表位于classpath下面的application-[type]-files.properties<br/>
-     *
+     * <p>
      * 多个配置文件会用最后面的覆盖相同属性值
      *
      * @param type 配置文件类型，application-[type]-files.properties
-     *
-     * @throws IOException	读取属性文件时
+     * @throws IOException 读取属性文件时
      */
     public static void init(String type) throws IOException {
         String fileNames = "application-" + type + "-files.properties";
@@ -59,6 +57,7 @@ public class PropertyFileUtil {
 
     /**
      * 内部处理
+     *
      * @param fileNames
      * @throws IOException
      */
@@ -80,7 +79,8 @@ public class PropertyFileUtil {
             propFiles[i] = files.getProperty(fileKey);
         }
 
-        logger.debug("读取属性文件：{}", ArrayUtils.toString(propFiles));;
+        logger.debug("读取属性文件：{}", ArrayUtils.toString(propFiles));
+        ;
         properties = loadProperties(propFiles);
         Set<Object> keySet = properties.keySet();
         for (Object key : keySet) {
@@ -119,6 +119,7 @@ public class PropertyFileUtil {
 
     /**
      * 获取所有的key
+     *
      * @return
      */
     public static Set<String> getKeys() {
@@ -127,6 +128,7 @@ public class PropertyFileUtil {
 
     /**
      * 获取键值对Map
+     *
      * @return
      */
     public static Map<String, String> getKeyValueMap() {
@@ -140,8 +142,9 @@ public class PropertyFileUtil {
 
     /**
      * 获取属性值
-     * @param key	键
-     * @return	值
+     *
+     * @param key 键
+     * @return 值
      */
     public static String get(String key) {
         String propertyValue = properties.getProperty(key);
@@ -151,9 +154,10 @@ public class PropertyFileUtil {
 
     /**
      * 获取属性值
-     * @param key	键
-     * @param defaultValue	默认值
-     * @return	值
+     *
+     * @param key          键
+     * @param defaultValue 默认值
+     * @return 值
      */
     public static String get(String key, String defaultValue) {
         String propertyValue = properties.getProperty(key);
@@ -164,8 +168,9 @@ public class PropertyFileUtil {
 
     /**
      * 向内存添加属性
-     * @param key		键
-     * @param value		值
+     *
+     * @param key   键
+     * @param value 值
      */
     public static void add(String key, String value) {
         properties.put(key, value);

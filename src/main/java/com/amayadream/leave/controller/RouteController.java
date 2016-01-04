@@ -14,47 +14,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RouteController {
 
     @RequestMapping(value = "/")
-    public String getIndex(){
+    public String getIndex() {
         return "apps/leave/login";
     }
 
     @RequestMapping(value = "login")
-    public String login(){
+    public String login() {
         return "apps/leave/login";
     }
 
     @RequestMapping(value = "leave")
-    public String leave(){
+    public String leave() {
         return "apps/leave/leave";
     }
 
     @RequestMapping(value = "running")
-    public String running(){
+    public String running() {
         return "apps/leave/running";
     }
 
     @RequestMapping(value = "finished")
-    public String finished(){
+    public String finished() {
         return "apps/leave/finished";
     }
 
     @RequestMapping(value = "start-process")
-    public String start_process(){
+    public String start_process() {
         return "apps/activiti/start-process";
     }
 
     @RequestMapping(value = "running-process")
-    public String running_process(){
+    public String running_process() {
         return "apps/activiti/running-process";
     }
 
     @RequestMapping(value = "deploy-manage")
-    public String deploy_manage(){
+    public String deploy_manage() {
         return "apps/activiti/deploy-manage";
     }
 
     @RequestMapping(value = "model-manage")
-    public String model_manage(){
+    public String model_manage() {
         return "apps/activiti/model-manage";
     }
 }

@@ -17,6 +17,7 @@ public class User {
 
     /**
      * getter&setter
+     *
      * @return
      */
     public String getUserid() {

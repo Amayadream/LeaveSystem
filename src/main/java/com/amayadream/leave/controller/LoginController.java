@@ -26,40 +26,44 @@ import javax.servlet.http.HttpSession;
 @RequestMapping(value = "user")
 public class LoginController {
 
-    @Resource private IUserService userService;
-    @Resource private ILogService logService;
-    @Resource private User user;
-    @Resource private Log log;
+    @Resource
+    private IUserService userService;
+    @Resource
+    private ILogService logService;
+    @Resource
+    private User user;
+    @Resource
+    private Log log;
 
     @RequestMapping(value = "login")
-    public String login(@RequestParam("username") String userid, @RequestParam String password, HttpServletRequest request, HttpSession session, RedirectAttributes redirectAttributes, DateUtil dateUtil, LogUtil logUtil, NetUtil netUtil){
+    public String login(@RequestParam("username") String userid, @RequestParam String password, HttpServletRequest request, HttpSession session, RedirectAttributes redirectAttributes, DateUtil dateUtil, LogUtil logUtil, NetUtil netUtil) {
         user = userService.selectUserByUserid(userid);
-        if(user != null){
-            if(password.equals(user.getPassword())){
+        if (user != null) {
+            if (password.equals(user.getPassword())) {
                 log.setUserid(user.getUserid());
                 log.setTime(dateUtil.getDateTime24());
                 log.setType(logUtil.LOG_TYPE_LOGIN);
                 log.setDetail(logUtil.LOG_DETAIL_USER_LOGIN);
                 log.setIp(netUtil.getIpAddress(request));
                 logService.insert(log);
-                session.setAttribute("user",user);
-                session.setAttribute("userid",user.getUserid());
+                session.setAttribute("user", user);
+                session.setAttribute("userid", user.getUserid());
                 return "redirect:/leave/list/task";
-            }else{
-                redirectAttributes.addFlashAttribute("error","用户名或密码错误!请重新登陆!");
+            } else {
+                redirectAttributes.addFlashAttribute("error", "用户名或密码错误!请重新登陆!");
                 return "redirect:/login";
             }
-        }else{
-            redirectAttributes.addFlashAttribute("error","查无此账号!");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "查无此账号!");
             return "redirect:/login";
         }
     }
 
     @RequestMapping(value = "logout")
-    public String logout(HttpSession session, RedirectAttributes redirectAttributes){
+    public String logout(HttpSession session, RedirectAttributes redirectAttributes) {
         session.removeAttribute("user");
         session.removeAttribute("userid");
-        redirectAttributes.addFlashAttribute("message","注销成功!");
+        redirectAttributes.addFlashAttribute("message", "注销成功!");
         return "redirect:/login";
     }
 

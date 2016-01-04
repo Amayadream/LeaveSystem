@@ -14,8 +14,12 @@ import java.util.List;
 @Service("groupDao")
 public interface IGroupDao {
     List<Group> selectAll();
+
     List<Group> selectGroupByUserid(String userid);
+
     boolean insert(Group group);
+
     boolean update(Group group);
+
     boolean delete(String groupid);
 }

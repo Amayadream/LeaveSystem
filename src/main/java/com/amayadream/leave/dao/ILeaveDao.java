@@ -14,9 +14,14 @@ import java.util.List;
 @Service("leaveDao")
 public interface ILeaveDao {
     List<Leave> selectAll();
+
     Leave selectLeaveById(String id);
+
     List<Leave> selectLeaveByUserid(String userid);
+
     boolean insert(Leave leave);
+
     boolean update(Leave leave);
+
     boolean delete(String id);
 }

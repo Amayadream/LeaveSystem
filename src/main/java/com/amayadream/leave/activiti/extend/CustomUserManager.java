@@ -24,8 +24,10 @@ import java.util.Map;
 public class CustomUserManager extends UserEntityManager {
     @Resource
     private IUserService userService;
+
     /**
      * 创建一个User实体
+     *
      * @param userId 用户id,实际为用户名
      * @return 用户实体
      */
@@ -37,6 +39,7 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 创建新用户
+     *
      * @param user 用户对象
      */
     public void insertUser(User user) {
@@ -47,6 +50,7 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 更新用户
+     *
      * @param updatedUser 用户对象
      */
     public void updateUser(User updatedUser) {
@@ -57,6 +61,7 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 根据用户名查询用户信息,用于登陆验证,需要重写(登陆验证时为用上,暂时没看出来用途)
+     *
      * @param userId 用户id,实际上是用户名
      * @return
      */
@@ -73,6 +78,7 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 根据用户名删除用户
+     *
      * @param userId 用户id,实际为用户名
      */
     public void deleteUser(String userId) {
@@ -83,6 +89,7 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 获取用户列表,QueryCriteria为查询条件,需要重写
+     *
      * @param query 查询条件
      * @param page  page对象,包括起始值与临界值
      * @return 用户list
@@ -103,6 +110,7 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 与findUserByQueryCriteria组合使用,查询符合query条件的用户数量
+     *
      * @param query 查询条件
      * @return 符合条件的用户数量
      */
@@ -114,6 +122,7 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 根据用户名查询用户所在的组,需要重写
+     *
      * @param userId 用户名
      * @return 分组list
      */
@@ -124,6 +133,7 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 创建新的查询条件,暂时不需要重写
+     *
      * @return 查询条件
      */
     public UserQuery createNewUserQuery() {
@@ -134,8 +144,9 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 查询用户具体信息
+     *
      * @param userId 用户id,实际为用户名
-     * @param key 关键字
+     * @param key    关键字
      * @return 用户信息实体
      */
     public IdentityInfoEntity findUserInfoByUserIdAndKey(String userId, String key) {
@@ -146,8 +157,9 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 查询用户具体信息
+     *
      * @param userId 用户id,实际为用户名
-     * @param type 类型
+     * @param type   类型
      * @return 用户信息实体
      */
     public List<String> findUserInfoKeysByUserIdAndType(String userId, String type) {
@@ -158,6 +170,7 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 登陆检查密码
+     *
      * @param userId   用户id,实际为用户名
      * @param password 密码
      * @return 返回布尔值 true|false
@@ -165,12 +178,12 @@ public class CustomUserManager extends UserEntityManager {
     public Boolean checkPassword(String userId, String password) {
         // TODO Auto-generated method stub
         com.amayadream.leave.pojo.User user = userService.selectUserByUserid(userId);
-        if(user == null){
+        if (user == null) {
             return false;
-        }else{
-            if(password.equals(user.getPassword())){
+        } else {
+            if (password.equals(user.getPassword())) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
@@ -178,6 +191,7 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 根据流程定义id查询候选人list,暂时没用到
+     *
      * @param proceDefId 流程定义id
      * @return
      */
@@ -189,6 +203,7 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 查询用户list,原始查询,暂时没用到
+     *
      * @param parameterMap
      * @param firstResult
      * @param maxResults
@@ -202,6 +217,7 @@ public class CustomUserManager extends UserEntityManager {
 
     /**
      * 和findUsersByNativeQuery结合,查询符合条件的用户总数
+     *
      * @param parameterMap
      * @return
      */

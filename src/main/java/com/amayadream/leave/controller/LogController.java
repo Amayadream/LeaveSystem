@@ -22,36 +22,40 @@ import java.util.List;
 @RequestMapping(value = "log")
 @SessionAttributes("userid")
 public class LogController {
-    @Resource private ILogService logService;
-    @Resource private Log log;
+    @Resource
+    private ILogService logService;
+    @Resource
+    private Log log;
 
     /**
      * 获取所有日志信息
+     *
      * @return
      */
     @RequestMapping(value = "all")
-    public ModelAndView all(){
+    public ModelAndView all() {
         ModelAndView view = new ModelAndView("/apps/leave/log");
         List<Log> list = logService.selectAll();
-        view.addObject("result",list);
+        view.addObject("result", list);
         return view;
     }
 
     /**
      * 获取某个用户的所有日志信息
+     *
      * @param userid
      * @return
      */
     @RequestMapping(value = "{userid}")
-    public ModelAndView id(@ModelAttribute("userid") String id, @PathVariable("userid") String userid){
+    public ModelAndView id(@ModelAttribute("userid") String id, @PathVariable("userid") String userid) {
         ModelAndView view = new ModelAndView("/apps/leave/log");
         List<Log> list;
-        if(id.equals(userid)){
+        if (id.equals(userid)) {
             list = logService.selectLogByUserid(userid);
-        }else{
+        } else {
             list = logService.selectLogByUserid(id);
         }
-        view.addObject("result",list);
+        view.addObject("result", list);
         return view;
     }
 }

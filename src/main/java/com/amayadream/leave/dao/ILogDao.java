@@ -14,9 +14,14 @@ import java.util.List;
 @Service("logDao")
 public interface ILogDao {
     List<Log> selectAll();
+
     List<Log> selectLogByUserid(String userid);
+
     boolean insert(Log log);
+
     boolean update(Log log);
+
     boolean delete(String id);
+
     boolean deleteAll(String userid);
 }

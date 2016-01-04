@@ -22,7 +22,6 @@ import java.util.Map;
 
 /**
  * 自定义的Activiti用户组管理器
- *
  */
 public class CustomGroupManager extends GroupEntityManager {
 
@@ -77,7 +76,7 @@ public class CustomGroupManager extends GroupEntityManager {
         // TODO Auto-generated method stub
         List<com.amayadream.leave.pojo.Group> list = groupService.selectGroupByUserid(userId);
         List<Group> list1 = new ArrayList<Group>();
-        for(com.amayadream.leave.pojo.Group group : list){
+        for (com.amayadream.leave.pojo.Group group : list) {
             Group group1 = new GroupEntity();
             group1.setId(group.getGroupid());
             group1.setName(group.getName());
@@ -100,7 +99,7 @@ public class CustomGroupManager extends GroupEntityManager {
         return super.findGroupCountByNativeQuery(parameterMap);
     }
 
-    public boolean isNewGroup(Group group){
+    public boolean isNewGroup(Group group) {
         System.out.println("isNewGroup");
         return super.isNewGroup(group);
     }

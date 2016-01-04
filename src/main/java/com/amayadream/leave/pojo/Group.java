@@ -16,6 +16,7 @@ public class Group {
 
     /**
      * getter&setter
+     *
      * @return
      */
     public String getGroupid() {

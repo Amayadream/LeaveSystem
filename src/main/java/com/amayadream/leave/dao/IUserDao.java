@@ -14,8 +14,12 @@ import java.util.List;
 @Service("userDao")
 public interface IUserDao {
     List<User> selectAll();
+
     User selectUserByUserid(String userid);
+
     boolean insert(User user);
+
     boolean update(User user);
+
     boolean delete(String userid);
 }

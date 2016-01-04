@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.amayadream.leave.dao.IGroupDao" >
+<mapper namespace="com.amayadream.leave.dao.IGroupDao">
 
-  <resultMap id="BaseResultMap" type="com.amayadream.leave.pojo.Group" >
-    <id column="GROUPID" property="groupid" jdbcType="VARCHAR" />
-    <result column="NAME" property="name" jdbcType="VARCHAR" />
-    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+  <resultMap id="BaseResultMap" type="com.amayadream.leave.pojo.Group">
+    <id column="GROUPID" property="groupid" jdbcType="VARCHAR"/>
+    <result column="NAME" property="name" jdbcType="VARCHAR"/>
+    <result column="TYPE" property="type" jdbcType="VARCHAR"/>
   </resultMap>
 
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     GROUPID, NAME, TYPE
   </sql>
 
   <!-- 查询所有用户 -->
-  <select id="selectAll" resultMap="BaseResultMap" >
+  <select id="selectAll" resultMap="BaseResultMap">
     SELECT * FROM GROUPS
 		WHERE GROUPID IN
 			(
@@ -22,7 +22,7 @@
   </select>
 
   <!-- 根据用户id查询用户 -->
-  <select id="selectGroupByUserid" resultMap="BaseResultMap" parameterType="string" >
+  <select id="selectGroupByUserid" resultMap="BaseResultMap" parameterType="string">
     SELECT * FROM GROUPS
 		WHERE GROUPID IN
 			(
@@ -32,7 +32,7 @@
   </select>
 
   <!-- 插入用户 -->
-  <insert id="insert" parameterType="com.amayadream.leave.pojo.Group" >
+  <insert id="insert" parameterType="com.amayadream.leave.pojo.Group">
     INSERT INTO GROUPS (GROUPID, NAME, TYPE)
     VALUES (#{groupid, jdbcType=VARCHAR}, #{name, jdbcType=VARCHAR}, #{type, jdbcType=VARCHAR})
   </insert>
@@ -52,7 +52,7 @@
   </update>
 
   <!-- 删除用户 -->
-  <delete id="delete" parameterType="string" >
+  <delete id="delete" parameterType="string">
     DELETE FROM GROUPS
     WHERE GROUPID = #{groupid, jdbcType=VARCHAR}
   </delete>

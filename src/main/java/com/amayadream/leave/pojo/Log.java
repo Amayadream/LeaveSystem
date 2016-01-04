@@ -19,6 +19,7 @@ public class Log {
 
     /**
      * getter&setter
+     *
      * @return
      */
     public String getId() {
