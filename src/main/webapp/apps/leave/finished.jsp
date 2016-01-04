@@ -66,8 +66,8 @@
             <th>申请结束时间</th>
             <th>实际开始时间</th>
             <th>实际结束时间</th>
-            <th>流程启动时间</th>
-            <th>流程结束时间</th>
+            <%--<th>流程启动时间</th>--%>
+            <%--<th>流程结束时间</th>--%>
             <th>流程版本</th>
         </tr>
         </thead>
@@ -79,11 +79,11 @@
                 <td>${leave.userid }</td>
                 <td>${leave.applytime }</td>
                 <td>${leave.starttime }</td>
+                <td>${leave.endtime }</td>
                 <td>${leave.realiystarttime }</td>
                 <td>${leave.realiyendtime }</td>
-                <td>${leave.endtime }</td>
-                <td>${hpi.startTime }</td>
-                <td>${hpi.endTime }</td>
+                <%--<td>${hpi.startTime }</td>--%>
+                <%--<td>${hpi.endTime }</td>--%>
                 <td>${leave.processDefinition.version }</td>
             </tr>
         </c:forEach>
