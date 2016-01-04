@@ -36,7 +36,7 @@
 </div>
 
 <script>
-    if(${error}){
+    if('${error}'){
         $.scojs_message("${error}",$.scojs_message.TYPE_ERROR);
     }
     <c:if test="${not empty param.error}">

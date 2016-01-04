@@ -1,5 +1,6 @@
 package com.amayadream.leave.activiti.controller.leave;
 
+import com.alibaba.fastjson.JSON;
 import com.amayadream.leave.activiti.service.leave.LeaveWorkflowService;
 import com.amayadream.leave.pojo.Leave;
 import com.amayadream.leave.service.ILeaveService;
@@ -133,49 +134,42 @@ public class ExperimentController {
     @RequestMapping(value = "detail-with-vars/{id}/{taskId}")
     @ResponseBody
     public Leave getExperimentWithVars(@PathVariable("id") String id, @PathVariable("taskId") String taskId) {
-        Leave leave = leaveService.selectLeaveById(taskId);
+        Leave leave = leaveService.selectLeaveById(id);
         Map<String, Object> variables = taskService.getVariables(taskId);
         leave.setVariables(variables);
         return leave;
     }
 
     /**
-     * 完成任务
      *
-     * @param taskId
-     * @return
+     * @param taskId    任务编号
+     * @param type      节点判断项
+     * @param b         判断项的值
+     * @param s         补充理由
+     * @return  1 or 0
      */
-    @RequestMapping(value = "complete/{id}", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "complete/{taskId}/{type}")
     @ResponseBody
-    public String complete(@PathVariable("id") String taskId, Variable var) {
+    public String complete2(@PathVariable("taskId") String taskId, @PathVariable("type") String type,boolean b, String s){
+        String result;
         try {
-            Map<String, Object> variables = var.getVariableMap();
-            taskService.complete(taskId, variables);
-            return "success";
-        } catch (Exception e) {
-            logger.error("error on complete task {}, variables={}", new Object[]{taskId, var.getVariableMap(), e});
-            return "error";
-        }
-    }
-
-    /**
-     * 完成任务
-     *
-     * @param taskId
-     * @return
-     */
-    @RequestMapping(value = "complete1/{id}/{var}", method = {RequestMethod.POST, RequestMethod.GET})
-    public String complete1(@PathVariable("id") String taskId, @PathVariable("var") boolean var, RedirectAttributes redirectAttributes) {
-        try {
+            String msg = "";
+            if(type.equals("LeaderApproval")){
+                msg = "LeaderMessage";
+            }
+            if(type.equals("PersonnelApproval")){
+                msg = "PersonnelMessage";
+            }
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("pass", var);
+            map.put(type, b);
+            map.put(msg, s);
             taskService.complete(taskId, map);
-            redirectAttributes.addFlashAttribute("message", "完成步骤");
-            return "redirect:/leave/list/task";
+            result = "1";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "操作失败");
-            return "redirect:/leave/list/task";
+            result = "0";
+            e.printStackTrace();
         }
+        return result;
     }
 
 }

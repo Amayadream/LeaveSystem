@@ -19,7 +19,7 @@
     <sequenceFlow id="flow9" name="重新申请" sourceRef="exclusivegateway3" targetRef="LeaderApproval" skipExpression="${Reapply}"></sequenceFlow>
     <endEvent id="End" name="结束"></endEvent>
     <sequenceFlow id="flow10" name="放弃申请" sourceRef="exclusivegateway3" targetRef="End" skipExpression="${!Reapply}"></sequenceFlow>
-    <sequenceFlow id="flow11" name="同意" sourceRef="exclusivegateway2" targetRef="BackFromLeave"></sequenceFlow>
+    <sequenceFlow id="flow11" name="同意" sourceRef="exclusivegateway2" targetRef="BackFromLeave" skipExpression="${Personnelpass}"></sequenceFlow>
     <sequenceFlow id="flow12" sourceRef="BackFromLeave" targetRef="End"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_leave">
@@ -108,7 +108,7 @@
         <omgdi:waypoint x="555.0" y="89.0"></omgdi:waypoint>
         <omgdi:waypoint x="600.0" y="89.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="16.0" width="32.0" x="554.0" y="70.0"></omgdc:Bounds>
+          <omgdc:Bounds height="16.0" width="100.0" x="554.0" y="70.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
