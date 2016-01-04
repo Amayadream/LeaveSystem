@@ -154,10 +154,10 @@ public class ExperimentController {
         String result;
         try {
             String msg = "";
-            if(type.equals("LeaderApproval")){
+            if(type.equals("Leaderpass")){
                 msg = "LeaderMessage";
             }
-            if(type.equals("PersonnelApproval")){
+            if(type.equals("Personnelpass")){
                 msg = "PersonnelMessage";
             }
             Map<String, Object> map = new HashMap<String, Object>();
@@ -170,6 +170,40 @@ public class ExperimentController {
             e.printStackTrace();
         }
         return result;
+    }
+
+    /**
+     * 调整申请
+     * @param taskId    任务编号
+     * @param leave     leave实体
+     * @param b         true or false
+     * @return
+     */
+    @RequestMapping(value = "re")
+    public String re(String taskId, Leave leave, boolean b, RedirectAttributes redirectAttributes){
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("Repass", b);
+        redirectAttributes.addFlashAttribute("message", "销毁成功");
+        if(b){
+            leaveService.update(leave);
+            redirectAttributes.addFlashAttribute("message", "调整成功");
+        }
+        taskService.complete(taskId, map);
+        return "redirect:/leave/list/task";
+    }
+
+    /**
+     * 销假
+     * @param taskId    任务编号
+     * @param leave     leave实体
+     * @return
+     */
+    @RequestMapping(value = "back")
+    public String back(String taskId, Leave leave, RedirectAttributes redirectAttributes){
+        leaveService.update(leave);
+        taskService.complete(taskId);
+        redirectAttributes.addFlashAttribute("message", "销假成功!");
+        return "redirect:/leave/list/task";
     }
 
 }

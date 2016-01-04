@@ -12,7 +12,6 @@
     <link href="<%=path%>/plugins/scojs/css/scojs.css" type="text/css" rel="stylesheet">
     <link href="<%=path%>/plugins/scojs/css/sco.message.css" type="text/css" rel="stylesheet">
     <script src="<%=path%>/plugins/jquery/jquery-2.1.4.min.js"></script>
-    <script src="<%=path%>/static/activiti/common.js"></script>
     <script src="<%=path%>/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="<%=path%>/plugins/scojs/js/sco.message.js"></script>
     <script type="text/javascript">

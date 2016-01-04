@@ -68,7 +68,6 @@
             <th>实际结束时间</th>
             <th>流程启动时间</th>
             <th>流程结束时间</th>
-            <th>流程结束原因</th>
             <th>流程版本</th>
         </tr>
         </thead>
@@ -85,7 +84,6 @@
                 <td>${leave.endtime }</td>
                 <td>${hpi.startTime }</td>
                 <td>${hpi.endTime }</td>
-                <td>${hpi.deleteReason }</td>
                 <td>${leave.processDefinition.version }</td>
             </tr>
         </c:forEach>

@@ -79,7 +79,7 @@
         APPLYTIME = #{applytime, jdbcType=VARCHAR},
       </if>
       <if test="realiystarttime != null and realiystarttime != ''">
-        REALIYSTARTTIME = #{REALIYSTARTTIME, jdbcType=VARCHAR},
+        REALIYSTARTTIME = #{realiystarttime, jdbcType=VARCHAR},
       </if>
       <if test="realiyendtime != null and realiyendtime != ''">
         REALIYENDTIME = #{realiyendtime, jdbcType=VARCHAR},
