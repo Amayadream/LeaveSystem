@@ -71,49 +71,46 @@
     </div><!-- /.container-fluid -->
 </nav>
 
-<div>
-    <div class="well">
-        <h1>工作区/<small>运行中的流程</small></h1>
-    </div>
-    <div class="well">
-        <table class="table table-bordered">
-            <tr>
-                <th>执行IDssss</th>
-                <th>流程实例ID</th>
-                <th>流程定义ID</th>
-                <th>当前节点</th>
-                <th>是否挂起</th>
-                <th>操作</th>
-            </tr>
+<div class="container-fluid">
+    <h1>工作区/<small>运行中的流程</small></h1>
+    <br>
+    <table class="table table-bordered">
+        <tr>
+            <th>执行IDssss</th>
+            <th>流程实例ID</th>
+            <th>流程定义ID</th>
+            <th>当前节点</th>
+            <th>是否挂起</th>
+            <th>操作</th>
+        </tr>
 
-            <c:forEach items="${page.result }" var="p">
-                <c:set var="pdid" value="${p.processDefinitionId }" />
-                <c:set var="activityId" value="${p.activityId }" />
-                <tr>
-                    <td>${p.id }</td>
-                    <td>${p.processInstanceId }</td>
-                    <td>${p.processDefinitionId }</td>
-                    <td><button class="btn btn-primary btn-sm show" id="${p.id}" onclick="showPage('${p.id}');"><%=ProcessDefinitionCache.getActivityName(pageContext.getAttribute("pdid").toString(), ObjectUtils.toString(pageContext.getAttribute("activityId"))) %></button></td>
-                    <td>
-                        <c:if test="${p.suspended}">
-                            <span class="label label-danger">已挂起</span>
-                        </c:if>
-                        <c:if test="${!p.suspended}">
-                            <span class="label label-success">正常</span>
-                        </c:if>
-                    </td>
-                    <td>
-                        <c:if test="${p.suspended }">
-                            <a href="<%=path%>/workflow/processinstance/update/active/${p.processInstanceId}" class="btn btn-sm btn-success">激活</a>
-                        </c:if>
-                        <c:if test="${!p.suspended }">
-                            <a href="<%=path%>/workflow/processinstance/update/suspend/${p.processInstanceId}" class="btn btn-sm btn-danger">挂起</a>
-                        </c:if>
-                    </td>
-                </tr>
-            </c:forEach>
-        </table>
-    </div>
+        <c:forEach items="${page.result }" var="p">
+            <c:set var="pdid" value="${p.processDefinitionId }" />
+            <c:set var="activityId" value="${p.activityId }" />
+            <tr>
+                <td>${p.id }</td>
+                <td>${p.processInstanceId }</td>
+                <td>${p.processDefinitionId }</td>
+                <td><button class="btn btn-primary btn-sm show" id="${p.id}" onclick="showPage('${p.id}');"><%=ProcessDefinitionCache.getActivityName(pageContext.getAttribute("pdid").toString(), ObjectUtils.toString(pageContext.getAttribute("activityId"))) %></button></td>
+                <td>
+                    <c:if test="${p.suspended}">
+                        <span class="label label-danger">已挂起</span>
+                    </c:if>
+                    <c:if test="${!p.suspended}">
+                        <span class="label label-success">正常</span>
+                    </c:if>
+                </td>
+                <td>
+                    <c:if test="${p.suspended }">
+                        <a href="<%=path%>/workflow/processinstance/update/active/${p.processInstanceId}" class="btn btn-sm btn-success">激活</a>
+                    </c:if>
+                    <c:if test="${!p.suspended }">
+                        <a href="<%=path%>/workflow/processinstance/update/suspend/${p.processInstanceId}" class="btn btn-sm btn-danger">挂起</a>
+                    </c:if>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
 </div>
 
 <!-- 图形模态框 -->

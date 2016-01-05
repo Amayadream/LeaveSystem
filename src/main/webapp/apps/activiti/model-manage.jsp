@@ -63,50 +63,44 @@
     </div><!-- /.container-fluid -->
 </nav>
 
-<div>
-    <div class="well">
-        <h1>工作区/<small>模型工作区</small></h1>
-    </div>
-    <div class="well">
-        <button class="btn btn-success" style="float:right;" onclick="javascript:add()">创建模型</button>
-    </div>
-    <div class="well">
-        <table class="table table-bordered">
-            <thead>
+<div class="container-fluid">
+    <h1>工作区/<small>模型工作区</small></h1>
+    <button class="btn btn-success" style="float:right;" onclick="javascript:add()">创建模型</button>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>KEY</th>
+            <th>Name</th>
+            <th>Version</th>
+            <th>创建时间</th>
+            <th>最后更新时间</th>
+            <th>元数据</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${list }" var="model">
             <tr>
-                <th>ID</th>
-                <th>KEY</th>
-                <th>Name</th>
-                <th>Version</th>
-                <th>创建时间</th>
-                <th>最后更新时间</th>
-                <th>元数据</th>
-                <th>操作</th>
+                <td>${model.id }</td>
+                <td>${model.key }</td>
+                <td>${model.name}</td>
+                <td>${model.version}</td>
+                <td>${model.createTime}</td>
+                <td>${model.lastUpdateTime}</td>
+                <td>${model.metaInfo}</td>
+                <td>
+                    <a href="<%=path%>/modeler.html?modelId=${model.id}" target="_blank">编辑</a>
+                    <a href="<%=path%>/workflow/model/getXml/${model.id}" target="_blank">角色工具</a>
+                    <a href="<%=path%>/workflow/model/deploy/${model.id}">部署</a>
+                    导出(<a href="<%=path%>/workflow/model/export/${model.id}/bpmn" target="_blank">BPMN</a>
+                    |&nbsp;<a href="<%=path%>/workflow/model/export/${model.id}/json" target="_blank">JSON</a>)
+                    <a href="<%=path%>/workflow/model/delete/${model.id}">删除</a>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${list }" var="model">
-                <tr>
-                    <td>${model.id }</td>
-                    <td>${model.key }</td>
-                    <td>${model.name}</td>
-                    <td>${model.version}</td>
-                    <td>${model.createTime}</td>
-                    <td>${model.lastUpdateTime}</td>
-                    <td>${model.metaInfo}</td>
-                    <td>
-                        <a href="<%=path%>/modeler.html?modelId=${model.id}" target="_blank">编辑</a>
-                        <a href="<%=path%>/workflow/model/getXml/${model.id}" target="_blank">角色工具</a>
-                        <a href="<%=path%>/workflow/model/deploy/${model.id}">部署</a>
-                        导出(<a href="<%=path%>/workflow/model/export/${model.id}/bpmn" target="_blank">BPMN</a>
-                        |&nbsp;<a href="<%=path%>/workflow/model/export/${model.id}/json" target="_blank">JSON</a>)
-                        <a href="<%=path%>/workflow/model/delete/${model.id}">删除</a>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </div>
+        </c:forEach>
+        </tbody>
+    </table>
 </div>
 
 <!-- 添加模态框 -->

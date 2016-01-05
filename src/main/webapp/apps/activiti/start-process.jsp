@@ -60,40 +60,37 @@
     </div><!-- /.container-fluid -->
 </nav>
 
-<div>
-    <div class="well">
-        <h1>所有流程/<small>可启动流程列表</small></h1>
-    </div>
-    <div class="well">
-        <table class="table table-bordered">
-            <thead>
+<div class="container-fluid">
+    <h1>所有流程/<small>可启动流程列表</small></h1>
+    <br>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>DID</th>
+            <th>名称</th>
+            <th>KEY</th>
+            <th>版本号</th>
+            <th>XML</th>
+            <th>图片</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${page.result }" var="process">
             <tr>
-                <th>ID</th>
-                <th>DID</th>
-                <th>名称</th>
-                <th>KEY</th>
-                <th>版本号</th>
-                <th>XML</th>
-                <th>图片</th>
-                <th>操作</th>
+                <td class='process-id'>${process.id }</td>
+                <td>${process.deploymentId }</td>
+                <td class='process-name'>${process.name }</td>
+                <td>${process.key }</td>
+                <td>${process.version }</td>
+                <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=xml'>${process.resourceName }</a></td>
+                <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=image'>${process.diagramResourceName }</a></td>
+                <td><a href="<%=path%>/workflow/processinstance/start/${process.id}" class="btn btn-sm btn-success">启动</a></td>
             </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${page.result }" var="process">
-                <tr>
-                    <td class='process-id'>${process.id }</td>
-                    <td>${process.deploymentId }</td>
-                    <td class='process-name'>${process.name }</td>
-                    <td>${process.key }</td>
-                    <td>${process.version }</td>
-                    <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=xml'>${process.resourceName }</a></td>
-                    <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=image'>${process.diagramResourceName }</a></td>
-                    <td><a href="<%=path%>/workflow/processinstance/start/${process.id}" class="btn btn-sm btn-success">启动</a></td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </div>
+        </c:forEach>
+        </tbody>
+    </table>
 </div>
 
 

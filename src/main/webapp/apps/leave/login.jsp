@@ -35,6 +35,35 @@
     </form>
 </div>
 
+<div style="width:500px;height: 200px;text-align:center;margin:150px auto;" >
+    <table class="table table-bordered" >
+        <thead>
+            <tr>
+                <th>用户名</th>
+                <th>密码</th>
+                <th>角色</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>admin</td>
+                <td>admin</td>
+                <td>管理员</td>
+            </tr>
+            <tr>
+                <td>leader</td>
+                <td>123456</td>
+                <td>部门领导</td>
+            </tr>
+            <tr>
+                <td>personnel</td>
+                <td>123456</td>
+                <td>人事经理</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 <script>
     if('${error}'){
         $.scojs_message("${error}",$.scojs_message.TYPE_ERROR);

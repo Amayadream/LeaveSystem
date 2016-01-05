@@ -68,64 +68,60 @@
     </div><!-- /.container-fluid -->
 </nav>
 
-<div>
-    <div class="well">
-        <h2>工作区/<small>流程定义及部署管理</small></h2>
+<div class="container-fluid">
+    <h2>工作区/<small>流程定义及部署管理</small></h2>
+    <button class="btn btn-primary" id="deploy" style="float:right">部署流程</button>
+    <div id="deployForm" style="display: none">
+        <h3>部署新流程/<small>支持的格式有:zip、bar、bpmn、bpmn20.xml</small></h3>
+        <form action="<%=path%>/workflow/deploy" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" /><br>
+            <input type="submit" value="提交" class="btn btn-success"/>
+        </form>
     </div>
-    <div class="well">
-        <button class="btn btn-primary" id="deploy" style="float:right">部署流程</button>
-        <div id="deployForm" style="display: none">
-            <h3>部署新流程/<small>支持的格式有:zip、bar、bpmn、bpmn20.xml</small></h3>
-            <form action="<%=path%>/workflow/deploy" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" />
-                <input type="submit" value="提交" />
-            </form>
-        </div>
-        <table class="table table-bordered">
-            <thead>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ProcessDefinitionId</th>
+            <th>DeploymentId</th>
+            <th>名称</th>
+            <th>KEY</th>
+            <th>版本号</th>
+            <th>XML</th>
+            <th>图片</th>
+            <th>部署时间</th>
+            <th width="10%">是否挂起</th>
+            <th width="15%">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${page.result }" var="object">
+            <c:set var="process" value="${object[0] }" />
+            <c:set var="deployment" value="${object[1] }" />
             <tr>
-                <th>ProcessDefinitionId</th>
-                <th>DeploymentId</th>
-                <th>名称</th>
-                <th>KEY</th>
-                <th>版本号</th>
-                <th>XML</th>
-                <th>图片</th>
-                <th>部署时间</th>
-                <th width="10%">是否挂起</th>
-                <th width="15%">操作</th>
+                <td>${process.id }</td>
+                <td>${process.deploymentId }</td>
+                <td>${process.name }</td>
+                <td>${process.key }</td>
+                <td>${process.version }</td>
+                <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=xml'>${process.resourceName }</a></td>
+                <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=image'>${process.diagramResourceName }</a></td>
+                <td>${deployment.deploymentTime }</td>
+                <td>
+                    <c:if test="${process.suspended }">
+                        <span class="label label-danger">已挂起</span>  <a href="processdefinition/update/active/${process.id}" class="btn btn-sm btn-success">激活</a>
+                    </c:if>
+                    <c:if test="${!process.suspended }">
+                        <span class="label label-success">已激活</span>  <a href="processdefinition/update/suspend/${process.id}" class="btn btn-sm btn-danger">挂起</a>
+                    </c:if>
+                </td>
+                <td>
+                    <a href='<%=path%>/workflow/process/delete?deploymentId=${process.deploymentId}' class="btn btn-sm btn-danger">删除</a>
+                    <a href='<%=path%>/workflow/process/convert-to-model/${process.id}' class="btn btn-sm btn-success">转换为Model</a>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${page.result }" var="object">
-                <c:set var="process" value="${object[0] }" />
-                <c:set var="deployment" value="${object[1] }" />
-                <tr>
-                    <td>${process.id }</td>
-                    <td>${process.deploymentId }</td>
-                    <td>${process.name }</td>
-                    <td>${process.key }</td>
-                    <td>${process.version }</td>
-                    <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=xml'>${process.resourceName }</a></td>
-                    <td><a target="_blank" href='<%=path%>/workflow/resource/read?processDefinitionId=${process.id}&resourceType=image'>${process.diagramResourceName }</a></td>
-                    <td>${deployment.deploymentTime }</td>
-                    <td>
-                        <c:if test="${process.suspended }">
-                            <span class="label label-danger">已挂起</span>  <a href="processdefinition/update/active/${process.id}" class="btn btn-sm btn-success">激活</a>
-                        </c:if>
-                        <c:if test="${!process.suspended }">
-                            <span class="label label-success">已激活</span>  <a href="processdefinition/update/suspend/${process.id}" class="btn btn-sm btn-danger">挂起</a>
-                        </c:if>
-                    </td>
-                    <td>
-                        <a href='<%=path%>/workflow/process/delete?deploymentId=${process.deploymentId}' class="btn btn-sm btn-danger">删除</a>
-                        <a href='<%=path%>/workflow/process/convert-to-model/${process.id}' class="btn btn-sm btn-success">转换为Model</a>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </div>
+        </c:forEach>
+        </tbody>
+    </table>
 </div>
 
 <!-- 删除模态框 -->
